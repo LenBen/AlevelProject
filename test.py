@@ -1,7 +1,7 @@
 import pyaudio
 import wave
 
-FRAMES_PER_BUFFER = 3200
+FRAMES_PER_BUFFER = 512
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
@@ -23,8 +23,11 @@ seconds = 5
 frames = []
 
 for i in range(0, int(RATE/FRAMES_PER_BUFFER*seconds)):
-    data = stream.read(FRAMES_PER_BUFFER)
-    frames.append(data)
+    try:
+        data = stream.read(FRAMES_PER_BUFFER)
+        frames.append(data, FRAMES_PER_BUFFER)
+    except:
+        print("Life is lemons i like melons and pasta")
 
 stream.stop_stream()
 stream.close()
