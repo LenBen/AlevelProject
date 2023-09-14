@@ -7,13 +7,30 @@ from PyQt6.QtWidgets import (
     QWidget,
     QGridLayout,
     QFormLayout,
-    QPushButton
+    QPushButton,
+    QVBoxLayout
     )
+
+def greet():
+    if msglabel.text():
+        msglabel.setText("")
+    else:
+        msglabel.setText("Hello there")
 
 app = QApplication([])
 
 window = QWidget()
-window.setWindowTitle("QH Box Layouts")
+window.setWindowTitle("Sigmals and slots")
+layout = QVBoxLayout()
+
+button = QPushButton("Grreet")
+button.clicked.connect(greet)
+
+layout.addWidget(button)
+msglabel = QLabel()
+layout.addWidget(msglabel)
+window.setLayout(layout)
+
 
 # layout = QGridLayout()
 # layout.addWidget(QPushButton("(0,0)"), 0, 0)
@@ -23,12 +40,12 @@ window.setWindowTitle("QH Box Layouts")
 # layout.addWidget(QPushButton("5,5"),5 ,5)
 # window.setLayout(layout)
 
-layout = QFormLayout()
-layout.addRow("Name:", QLineEdit())
-layout.addRow("Age:", QLineEdit())
-layout.addRow("Job:", QLineEdit())
-layout.addRow("Hobbies:", QLineEdit())
-window.setLayout(layout)
+# layout = QFormLayout()
+# layout.addRow("Name:", QLineEdit())
+# layout.addRow("Age:", QLineEdit())
+# layout.addRow("Job:", QLineEdit())
+# layout.addRow("Hobbies:", QLineEdit())
+# window.setLayout(layout)
 
 # window.setGeometry(200, 300, 350, 100)
 # helloMsg = QLabel("<h1>Hello, Worlgd!</h1>", parent=window)
