@@ -10,12 +10,13 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout
     )
+from functools import partial
 
-def greet():
+def greet(name: str):
     if msglabel.text():
         msglabel.setText("")
     else:
-        msglabel.setText("Hello there")
+        msglabel.setText(f"Hello there {name}")
 
 app = QApplication([])
 
@@ -24,7 +25,7 @@ window.setWindowTitle("Sigmals and slots")
 layout = QVBoxLayout()
 
 button = QPushButton("Grreet")
-button.clicked.connect(greet)
+button.clicked.connect(partial(greet,"Nicholas Demitiu"))
 
 layout.addWidget(button)
 msglabel = QLabel()
