@@ -1,10 +1,10 @@
 import pyaudio
 import wave
 
-FRAMES_PER_BUFFER = 512
+FRAMES_PER_BUFFER = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-RATE = 16000
+RATE = 44100
 
 p = pyaudio.PyAudio()
 
@@ -14,6 +14,7 @@ stream = p.open(
     rate=RATE,
     input=True,
     frames_per_buffer=FRAMES_PER_BUFFER
+    
 
 )
 
@@ -24,8 +25,9 @@ frames = []
 
 for i in range(0, int(RATE/FRAMES_PER_BUFFER*seconds)):
     try:
+        print("t")
         data = stream.read(FRAMES_PER_BUFFER)
-        frames.append(data, FRAMES_PER_BUFFER)
+        frames.append(data)
     except:
         print("Life is lemons i like melons and pasta")
 
@@ -36,7 +38,7 @@ p.terminate()
 
 obj = wave.open("output.wav", "wb")
 obj.setnchannels(CHANNELS)
-obj.setsampwidth(p.get_sample_size) 
+obj.setsampwidth(int(p.get_sample_size)) 
 obj.setframerate(RATE)
 obj.writeframes(b"".join(frames))
 obj.close()
