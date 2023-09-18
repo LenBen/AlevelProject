@@ -16,8 +16,8 @@ stream = p.open(rate=RATE,
                 input=True,
                 frames_per_buffer=CHUNK)
 
-print("THis is the record thing, please enter the amount of seconds you want to record")
-record_audio: int = int(input())
+# print("THis is the record thing, please enter the amount of seconds you want to record")
+# record_audio: int = int(input())
 
 print("* recording")
 
