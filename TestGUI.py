@@ -13,6 +13,18 @@ from PyQt6.QtWidgets import (
     )
 from functools import partial
 
+import pyaudio
+import wave
+
+CHUNK = 512
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+record_audio = 5
+WAVE_OUTPUT_FILENAME = "voice.wav"
+
+
+
 WINDOW_SIZE = 256
 DISPLAY_HEIGHT = 40
 BUTTON_SIZE = 40
@@ -41,13 +53,43 @@ class TestGUIWIndow(QMainWindow):
          self.button1.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
          buttonsLayout.addWidget(self.button1)
          self.generalLayout.addLayout(buttonsLayout)
+         self.button1.clicked.connect(record)
 
+def record():
+     
+     p = pyaudio.PyAudio()
+     stream = p.open(rate=RATE,
+                format=FORMAT,
+                channels=CHANNELS,
+                input=True,
+                frames_per_buffer=CHUNK)
+     frames = []
+
+     print("recording start **")
+
+     for i in range(0, int(RATE / CHUNK * record_audio)):
+        data = stream.read(CHUNK)
+        frames.append(data)
+
+     print("** recording ended")
+
+     stream.stop_stream()
+     stream.close()
+     p.terminate()
+
+     wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+     wf.setnchannels(CHANNELS)
+     wf.setsampwidth(p.get_sample_size(FORMAT))
+     wf.setframerate(RATE)
+     wf.writeframes(b''.join(frames))
+     wf.close()
 
 def main():
       App = QApplication([])
       Window = TestGUIWIndow()
       Window.show()
       sys.exit(App.exec())
+
 
 if __name__ == "__main__":
      main()
