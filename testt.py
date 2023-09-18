@@ -1,26 +1,29 @@
 import pyaudio
 import wave
 
-CHUNK = 1024
+CHUNK = 512
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-RECORD_SECONDS = 5
+record_audio = 5
 WAVE_OUTPUT_FILENAME = "voice.wav"
 
 p = pyaudio.PyAudio()
 
-stream = p.open(format=FORMAT,
+stream = p.open(rate=RATE,
+                format=FORMAT,
                 channels=CHANNELS,
-                rate=RATE,
                 input=True,
                 frames_per_buffer=CHUNK)
+
+# print("THis is the record thing, please enter the amount of seconds you want to record")
+# record_audio: int = int(input())
 
 print("* recording")
 
 frames = []
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+for i in range(0, int(RATE / CHUNK * record_audio)):
     data = stream.read(CHUNK)
     frames.append(data)
 
