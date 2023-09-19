@@ -9,12 +9,14 @@ from PyQt6.QtWidgets import (
     QGridLayout,
     QLineEdit,
     QPushButton,
-    QVBoxLayout
+    QVBoxLayout,
+    QHBoxLayout
     )
 from functools import partial
 
 import pyaudio
 import wave
+import vlc
 
 CHUNK = 512
 FORMAT = pyaudio.paInt16
@@ -48,12 +50,21 @@ class TestGUIWIndow(QMainWindow):
         self.generalLayout.addWidget(self.display)
 
     def _createButton(self):
-         buttonsLayout = QVBoxLayout()
+         buttonsLayout = QHBoxLayout()
          self.button1 = QPushButton(text="Record")
          self.button1.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
          buttonsLayout.addWidget(self.button1)
-         self.generalLayout.addLayout(buttonsLayout)
          self.button1.clicked.connect(record)
+
+         self.button2 = QPushButton(text="Play")
+         self.button2.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
+         buttonsLayout.addWidget(self.button2)
+
+         widget = QWidget()
+         widget.setLayout(buttonsLayout)
+         self.setCentralWidget(widget)
+         self.generalLayout.addLayout(buttonsLayout)
+         self.button2.clicked.connect(PlayMusic)
 
 def record():
      
@@ -85,20 +96,8 @@ def record():
      wf.close()
 
 def PlayMusic():
-     f = wave.open("voice.wav", "rb")
-     p = pyaudio.PyAudio()
-     stream = p.open(rate=RATE,
-                format=FORMAT,
-                channels=CHANNELS,
-                input=True,
-                frames_per_buffer=CHUNK)
-     data = f.readframes(CHUNK)
-     while data:
-          stream.write(data)
-          data = f.readframes(CHUNK)
-     stream.stop_stream()
-     stream.close()
-     p.terminate()
+    wav = vlc.MediaPlayer("voice.wav")
+    wav.play()
 
 def main():
       App = QApplication([])
