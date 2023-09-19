@@ -84,6 +84,22 @@ def record():
      wf.writeframes(b''.join(frames))
      wf.close()
 
+def PlayMusic():
+     f = wave.open("voice.wav", "rb")
+     p = pyaudio.PyAudio()
+     stream = p.open(rate=RATE,
+                format=FORMAT,
+                channels=CHANNELS,
+                input=True,
+                frames_per_buffer=CHUNK)
+     data = f.readframes(CHUNK)
+     while data:
+          stream.write(data)
+          data = f.readframes(CHUNK)
+     stream.stop_stream()
+     stream.close()
+     p.terminate()
+
 def main():
       App = QApplication([])
       Window = TestGUIWIndow()
