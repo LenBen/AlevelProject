@@ -49,7 +49,7 @@ class TestGUIWIndow(QMainWindow):
 
     def _createButton(self):
          buttonsLayout = QVBoxLayout()
-         self.button1 = QPushButton("Record")
+         self.button1 = QPushButton(text="Record")
          self.button1.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
          buttonsLayout.addWidget(self.button1)
          self.generalLayout.addLayout(buttonsLayout)
