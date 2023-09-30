@@ -42,7 +42,7 @@ class Audio:
      wf.writeframes(b''.join(frames))
      wf.close()
 
-     print(frames)
+     #print(frames)
 
    def PlayMusic(*args, **kwargs):
         wav = vlc.MediaPlayer("voice.wav")
