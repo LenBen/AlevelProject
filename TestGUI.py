@@ -9,7 +9,8 @@ from PyQt6.QtWidgets import (
     QGridLayout,
     QLineEdit,
     QPushButton,
-    QVBoxLayout
+    QVBoxLayout,
+    QFormLayout,
     )
 from functools import partial
 
@@ -69,6 +70,7 @@ class TestGUIWIndow(QMainWindow):
          self.setCentralWidget(widget)
          self.generalLayout.addLayout(buttonsLayout)
          self.button2.clicked.connect(audio.PlayMusic)
+
 
 def main():
       App = QApplication([])

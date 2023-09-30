@@ -10,10 +10,10 @@ record_audio = 5
 WAVE_OUTPUT_FILENAME = "voice.wav"
 
 class Audio:
-    def __init__(self) -> None:
+   def __init__(self) -> None:
        pass
 
-    def record(*args, **kwargs):
+   def record(*args, **kwargs):
      
      p = pyaudio.PyAudio()
      stream = p.open(rate=RATE,
@@ -42,6 +42,8 @@ class Audio:
      wf.writeframes(b''.join(frames))
      wf.close()
 
-    def PlayMusic(*args, **kwargs):
+     print(frames)
+
+   def PlayMusic(*args, **kwargs):
         wav = vlc.MediaPlayer("voice.wav")
         wav.play()
