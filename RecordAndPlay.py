@@ -12,6 +12,19 @@ WAVE_OUTPUT_FILENAME = "voice.wav"
 class Audio:
    def __init__(self) -> None:
        pass
+   
+   def setRecordTime(self, record_time) -> int:
+      global record_audio
+      record_time = int(record_time)
+      if record_time >= 0 and record_time <=60:
+         record_audio = record_time
+         return 0 
+      else:
+         return 404
+   
+   def getRecordTime(self) -> int:
+      global record_audio
+      return record_audio
 
    def record(*args, **kwargs):
      
