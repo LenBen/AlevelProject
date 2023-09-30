@@ -57,7 +57,18 @@ class MainWindow(QWidget):
         title_label.setText("Record and Play audio")
         title_label.setFont(QFont("Arial", 20))
         title_label.move(WINDOW_SIZE//4,30)
+        self._createButtons()
     
+    def _createButtons(self):
+        # self.name_label = QLabel("Record",self)
+        # self.name_label.setAlignment(
+        #     Qt.AlignmentFlag.AlignCenter)
+        # self.name_label.move(80,90)
+
+        self.buttonR = QPushButton("Record", self)
+        self.buttonR.move(80,110)
+        self.buttonR.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
+        self.buttonR.clicked.connect(audio.record)
 
 def main():
     app = QApplication(sys.argv)
