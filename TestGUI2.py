@@ -60,15 +60,15 @@ class MainWindow(QWidget):
         self._createButtons()
     
     def _createButtons(self):
-        # self.name_label = QLabel("Record",self)
-        # self.name_label.setAlignment(
-        #     Qt.AlignmentFlag.AlignCenter)
-        # self.name_label.move(80,90)
-
         self.buttonR = QPushButton("Record", self)
         self.buttonR.move(80,110)
         self.buttonR.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
         self.buttonR.clicked.connect(audio.record)
+
+        self.buttonP = QPushButton("Play", self)
+        self.buttonP.move(80,210)
+        self.buttonP.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
+        self.buttonP.clicked.connect(audio.PlayMusic)
 
 def main():
     app = QApplication(sys.argv)
