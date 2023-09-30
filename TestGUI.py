@@ -1,7 +1,11 @@
 import sys
 import typing
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt 
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import (
+     QFont,
+     QPixmap,
+) 
 from PyQt6.QtWidgets import (
     QApplication, 
     QMainWindow, 
@@ -11,6 +15,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QFormLayout,
+    QLabel,
     )
 from functools import partial
 
@@ -32,28 +37,25 @@ audio = Audio()
 
 
 
-WINDOW_SIZE = 256
+WINDOW_SIZE = 512
 DISPLAY_HEIGHT = 40
-BUTTON_SIZE = 40
+BUTTON_SIZE = 60
 
 class TestGUIWIndow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle("Record Program")
-        self.setFixedSize(WINDOW_SIZE,WINDOW_SIZE)
         self.generalLayout = QVBoxLayout()
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
-        self._createDisplay()
-        self._createButton()
-    
-    def _createDisplay(self):
-        self.display = QLineEdit()
-        self.display.setFixedHeight(DISPLAY_HEIGHT)
-        self.display.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.display.setReadOnly(True)
-        self.generalLayout.addWidget(self.display)
+        self._createUI()
 
+    def _createUI(self):
+         self.setFixedSize(WINDOW_SIZE,WINDOW_SIZE)
+         self.setWindowTitle("Record and Play")
+         self._createButton()
+         self._createText()
+         self.show()
+    
     def _createButton(self):
          buttonsLayout = QVBoxLayout()
          self.button1 = QPushButton(text="Record")
@@ -70,6 +72,12 @@ class TestGUIWIndow(QMainWindow):
          self.setCentralWidget(widget)
          self.generalLayout.addLayout(buttonsLayout)
          self.button2.clicked.connect(audio.PlayMusic)
+
+    def _createText(self):
+         title_label = QLabel(self)
+         title_label.setText("Test audio recorder")
+         title_label.setFont(QFont("Arial", 25))
+         title_label.move(DISPLAY_HEIGHT//2,30)
 
 
 def main():
