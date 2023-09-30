@@ -1,7 +1,11 @@
 import sys
 import typing
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt 
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import (
+     QFont,
+     QPixmap,
+) 
 from PyQt6.QtWidgets import (
     QApplication, 
     QMainWindow, 
@@ -10,13 +14,17 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QVBoxLayout,
-    QHBoxLayout
+    QFormLayout,
+    QLabel,
     )
 from functools import partial
 
 import pyaudio
 import wave
 import vlc
+
+from RecordAndPlay import Audio
+
 
 CHUNK = 512
 FORMAT = pyaudio.paInt16
@@ -25,36 +33,35 @@ RATE = 44100
 record_audio = 5
 WAVE_OUTPUT_FILENAME = "voice.wav"
 
+audio = Audio()
 
 
-WINDOW_SIZE = 256
+
+WINDOW_SIZE = 512
 DISPLAY_HEIGHT = 40
-BUTTON_SIZE = 40
+BUTTON_SIZE = 60
 
 class TestGUIWIndow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle("Record Program")
-        self.setFixedSize(WINDOW_SIZE,WINDOW_SIZE)
         self.generalLayout = QVBoxLayout()
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
-        self._createDisplay()
-        self._createButton()
-    
-    def _createDisplay(self):
-        self.display = QLineEdit()
-        self.display.setFixedHeight(DISPLAY_HEIGHT)
-        self.display.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.display.setReadOnly(True)
-        self.generalLayout.addWidget(self.display)
+        self._createUI()
 
+    def _createUI(self):
+         self.setFixedSize(WINDOW_SIZE,WINDOW_SIZE)
+         self.setWindowTitle("Record and Play")
+         self._createButton()
+         self._createText()
+         self.show()
+    
     def _createButton(self):
-         buttonsLayout = QHBoxLayout()
+         buttonsLayout = QVBoxLayout()
          self.button1 = QPushButton(text="Record")
          self.button1.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
          buttonsLayout.addWidget(self.button1)
-         self.button1.clicked.connect(record)
+         self.button1.clicked.connect(audio.record)
 
          self.button2 = QPushButton(text="Play")
          self.button2.setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
@@ -64,40 +71,14 @@ class TestGUIWIndow(QMainWindow):
          widget.setLayout(buttonsLayout)
          self.setCentralWidget(widget)
          self.generalLayout.addLayout(buttonsLayout)
-         self.button2.clicked.connect(PlayMusic)
+         self.button2.clicked.connect(audio.PlayMusic)
 
-def record():
-     
-     p = pyaudio.PyAudio()
-     stream = p.open(rate=RATE,
-                format=FORMAT,
-                channels=CHANNELS,
-                input=True,
-                frames_per_buffer=CHUNK)
-     frames = []
+    def _createText(self):
+         title_label = QLabel(self)
+         title_label.setText("Test audio recorder")
+         title_label.setFont(QFont("Arial", 25))
+         title_label.move(DISPLAY_HEIGHT//2,30)
 
-     print("recording start **")
-
-     for i in range(0, int(RATE / CHUNK * record_audio)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-
-     print("** recording ended")
-
-     stream.stop_stream()
-     stream.close()
-     p.terminate()
-
-     wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-     wf.setnchannels(CHANNELS)
-     wf.setsampwidth(p.get_sample_size(FORMAT))
-     wf.setframerate(RATE)
-     wf.writeframes(b''.join(frames))
-     wf.close()
-
-def PlayMusic():
-    wav = vlc.MediaPlayer("voice.wav")
-    wav.play()
 
 def main():
       App = QApplication([])
