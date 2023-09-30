@@ -53,11 +53,31 @@ class MainWindow(QWidget):
         self.show()
     
     def _setUpMainWindow(self):
+        # title_label = QLabel(self)
+        # title_label.setText("Record and Play audio")
+        # title_label.setFont(QFont("Arial", 20))
+        # title_label.move(WINDOW_SIZE//4,30)
+        self._createButtons()
+        self._createLineEditTime()
+        self._setUpLabels()
+
+        # bottom_label = QLabel(self)
+        # bottom_label.setText("Like a digital Cassette recorder/player!")
+        # bottom_label.move(15,WINDOW_SIZE-20)
+
+    def _setUpLabels(self):
         title_label = QLabel(self)
         title_label.setText("Record and Play audio")
         title_label.setFont(QFont("Arial", 20))
         title_label.move(WINDOW_SIZE//4,30)
-        self._createButtons()
+
+        bottom_label = QLabel(self)
+        bottom_label.setText("Like a digital Cassette recorder/player!")
+        bottom_label.move(15,WINDOW_SIZE-20)
+
+        self.time_label = QLabel(self)
+        self.time_label.move(80,230)
+        self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
     
     def _createButtons(self):
         self.buttonR = QPushButton("Record", self)
@@ -66,9 +86,32 @@ class MainWindow(QWidget):
         self.buttonR.clicked.connect(audio.record)
 
         self.buttonP = QPushButton("Play", self)
-        self.buttonP.move(80,210)
+        self.buttonP.move(80,310)
         self.buttonP.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
         self.buttonP.clicked.connect(audio.PlayMusic)
+
+
+    def _createLineEditTime(self):
+        QLabel("Please enter the recording length below (seconds).",self).move(80,190)
+
+        self.time_edit = QLineEdit(self)
+        self.time_edit.resize(210,20)
+        self.time_edit.move(80,210)
+
+        self.buttonC = QPushButton("Enter",self)
+        self.buttonC.move(300,208)
+        self.buttonC.clicked.connect(self._acceptTime)
+
+        # self.time_label = QLabel(self)
+        # self.time_label.move(80,230)
+    
+    def _acceptTime(self):
+            time = self.time_edit.text()
+            print(time)
+            t = audio.setRecordTime(int(time))
+            self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
+            
+
 
 def main():
     app = QApplication(sys.argv)
