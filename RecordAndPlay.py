@@ -15,7 +15,16 @@ class Audio:
    
    def setRecordTime(self, record_time) -> int:
       global record_audio
+      record_time = str(record_time)
+      try:
+         if (ord(record_time) <= 48 or ord(record_time) >= 57):
+            return 55
+      except:
+         print("Error with ASCII")
+         return 55
+         
       record_time = int(record_time)
+
       if record_time >= 0 and record_time <=60:
          record_audio = record_time
          return 0 

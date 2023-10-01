@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QFormLayout,
     QLabel,
+    QMessageBox,
     )
 from functools import partial
 
@@ -97,19 +98,40 @@ class MainWindow(QWidget):
         self.time_edit = QLineEdit(self)
         self.time_edit.resize(210,20)
         self.time_edit.move(80,210)
+        self.time_edit.textChanged.connect(self._checkIfNotEmpty)
 
         self.buttonC = QPushButton("Enter",self)
         self.buttonC.move(300,208)
         self.buttonC.clicked.connect(self._acceptTime)
+        self.buttonC.setDisabled(True)
 
         # self.time_label = QLabel(self)
         # self.time_label.move(80,230)
     
     def _acceptTime(self):
+            # print(time)
             time = self.time_edit.text()
-            print(time)
-            t = audio.setRecordTime(int(time))
-            self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
+            try:
+                t = audio.setRecordTime(time)
+            except:
+                print("No inputty")
+            if t == 55:
+                QMessageBox.critical(self,
+                                      "Character Error",
+                                      """<p>The charqacters inputted are invalid</p>
+                                      <p>Please only input one number for the time being</p>""",
+                                      QMessageBox.StandardButton.Ok)
+            if t == 0:
+                self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
+
+    
+    def _checkIfNotEmpty(self, text):
+        if text:
+            self.buttonC.setDisabled(False)
+        elif not text:
+            self.buttonC.setDisabled(True)
+        else:
+            print("Error")
             
 
 
