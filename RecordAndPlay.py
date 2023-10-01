@@ -13,20 +13,36 @@ class Audio:
    def __init__(self) -> None:
        pass
    
-   def setRecordTime(self, record_time) -> int:
+   def setRecordTime(self, record_time) -> int: # setter of record_audio
       global record_audio
+      nums = []
+      rec_time = ""
+
+      for n in range(len(record_time)): # turn the input into an array
+         nums.append(record_time[n])
+
+      for n in range(len(nums)): # ensure the contents of the array are valid
+         if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
+            return 55
+      
+      for i in range(len(nums)): # turn the array back into a string
+         rec_time += str(nums[i])
+      
+      record_time = int(rec_time) # turn the string into an integer
+         
       record_time = int(record_time)
-      if record_time >= 0 and record_time <=60:
+
+      if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
          record_audio = record_time
          return 0 
       else:
          return 404
    
-   def getRecordTime(self) -> int:
+   def getRecordTime(self) -> int: # getter of record_audio
       global record_audio
       return record_audio
 
-   def record(*args, **kwargs):
+   def record(*args, **kwargs): # records for specified time
      
      p = pyaudio.PyAudio()
      stream = p.open(rate=RATE,
@@ -55,8 +71,7 @@ class Audio:
      wf.writeframes(b''.join(frames))
      wf.close()
 
-     #print(frames)
 
-   def PlayMusic(*args, **kwargs):
+   def PlayMusic(*args, **kwargs): # plays back the recording
         wav = vlc.MediaPlayer("voice.wav")
         wav.play()
