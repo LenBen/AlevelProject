@@ -118,8 +118,8 @@ class MainWindow(QWidget):
             if t == 55:
                 QMessageBox.critical(self,
                                       "Character Error",
-                                      """<p>The charqacters inputted are invalid</p>
-                                      <p>Please only input one number for the time being</p>""",
+                                      """<p>The characters inputted are invalid</p>
+                                      <p>Please only input numbers</p>""",
                                       QMessageBox.StandardButton.Ok)
             if t == 0:
                 self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")

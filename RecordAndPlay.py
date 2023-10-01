@@ -15,13 +15,24 @@ class Audio:
    
    def setRecordTime(self, record_time) -> int:
       global record_audio
-      record_time = str(record_time)
+      nums = []
+      rec_time = ""
+
+      for n in range(len(record_time)):
+         nums.append(record_time[n])
+
       try:
-         if (ord(record_time) <= 48 or ord(record_time) >= 57):
-            return 55
+         for n in range(len(nums)):
+            if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
+               return 55
       except:
          print("Error with ASCII")
          return 55
+      
+      for i in range(len(nums)):
+         rec_time += str(nums[i])
+      
+      record_time = int(rec_time)
          
       record_time = int(record_time)
 
