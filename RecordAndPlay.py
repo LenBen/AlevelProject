@@ -13,7 +13,7 @@ class Audio:
    def __init__(self) -> None:
        pass
    
-   def setRecordTime(self, record_time) -> int: # setter of record_audio
+   def setRecordTime(self, record_time) -> bool: # setter of record_audio
       global record_audio
       nums = []
       rec_time = ""
@@ -23,7 +23,7 @@ class Audio:
 
       for n in range(len(nums)): # ensure the contents of the array are valid
          if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
-            return 55
+            return False
       
       for i in range(len(nums)): # turn the array back into a string
          rec_time += str(nums[i])
@@ -34,9 +34,9 @@ class Audio:
 
       if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
          record_audio = record_time
-         return 0 
+         return True 
       else:
-         return 404
+         return False
    
    def getRecordTime(self) -> int: # getter of record_audio
       global record_audio

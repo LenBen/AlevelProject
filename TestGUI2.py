@@ -1,4 +1,5 @@
 import sys
+import os
 import typing
 from PyQt6 import QtCore
 from PyQt6.QtCore import Qt
@@ -20,35 +21,23 @@ from PyQt6.QtWidgets import (
     )
 from functools import partial
 
-import pyaudio
-import wave
-import vlc
 
 from RecordAndPlay import Audio
 
 
-CHUNK = 512
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-record_audio = 5
-WAVE_OUTPUT_FILENAME = "voice.wav"
-
 audio = Audio()
 
-
-
-WINDOW_SIZE = 512
-DISPLAY_HEIGHT = 40
-BUTTON_SIZE = 60
 
 class MainWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
+        self.windowSize = 512
+        self.displaySize = 40
+        self.buttonSize = 60
         self._initialiseUI()
     
     def _initialiseUI(self):
-        self.setFixedSize(WINDOW_SIZE,WINDOW_SIZE)
+        self.setFixedSize(self.windowSize,self.windowSize)
         self.setWindowTitle("Record and Play")
         self._setUpMainWindow()
         self.show()
@@ -62,11 +51,11 @@ class MainWindow(QWidget):
         title_label = QLabel(self)
         title_label.setText("Record and Play audio")
         title_label.setFont(QFont("Arial", 20))
-        title_label.move(WINDOW_SIZE//4,30)
+        title_label.move(self.windowSize//4,30)
 
         bottom_label = QLabel(self)
         bottom_label.setText("Like a digital Cassette recorder/player!")
-        bottom_label.move(15,WINDOW_SIZE-20)
+        bottom_label.move(15,self.windowSize-20)
 
         self.time_label = QLabel(self)
         self.time_label.move(80,230)
@@ -75,18 +64,24 @@ class MainWindow(QWidget):
     def _createButtons(self): # creates buttons
         self.buttonR = QPushButton("Record", self)
         self.buttonR.move(80,110)
-        self.buttonR.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
+        self.buttonR.setFixedSize(self.buttonSize,self.buttonSize)
         self.buttonR.clicked.connect(audio.record)
 
         self.buttonP = QPushButton("Play", self)
         self.buttonP.move(80,310)
-        self.buttonP.setFixedSize(BUTTON_SIZE,BUTTON_SIZE)
+        self.buttonP.setFixedSize(self.buttonSize,self.buttonSize)
         self.buttonP.clicked.connect(audio.PlayMusic)
 
         self.buttonC = QPushButton("Enter",self)
         self.buttonC.move(300,208)
         self.buttonC.clicked.connect(self._acceptTime)
         self.buttonC.setDisabled(True)
+
+        self.buttonTest = QPushButton("Run the command that runs the library", self)
+        self.buttonTest.move(500,300)
+        self.buttonTest.setFixedSize(self.buttonSize,self.buttonSize)
+        self.buttonTest.clicked.connect(self.runCommand)
+
 
 
     def _createLineEditTime(self): # creates the Line
@@ -101,13 +96,13 @@ class MainWindow(QWidget):
     def _acceptTime(self):
             t = audio.setRecordTime(self.time_edit.text()) # passes the value of the line edit through to the setter of record_audio
 
-            if t == 55: # returns an error message if the data is incorrect
+            if not t: # returns an error message if the data is incorrect
                 QMessageBox.critical(self,
                                       "Character Error",
                                       """<p>The characters inputted are invalid</p>
                                       <p>Please only input numbers</p>""",
                                       QMessageBox.StandardButton.Ok)
-            if t == 0: # if the data is correct it updates the text
+            if t: # if the data is correct it updates the text
                 self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
 
     
@@ -118,7 +113,9 @@ class MainWindow(QWidget):
             self.buttonC.setDisabled(True)
         else:
             print("Error")
-            
+
+    def runCommand():
+        os.system("python Orchestra\main.py Orchestra\input Orchestra\output")
 
 
 def main():
