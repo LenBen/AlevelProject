@@ -1,4 +1,5 @@
 import sys
+import os
 import typing
 from PyQt6 import QtCore
 from PyQt6.QtCore import Qt
@@ -20,19 +21,9 @@ from PyQt6.QtWidgets import (
     )
 from functools import partial
 
-import pyaudio
-import wave
-import vlc
 
 from RecordAndPlay import Audio
 
-
-CHUNK = 512
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-record_audio = 5
-WAVE_OUTPUT_FILENAME = "voice.wav"
 
 audio = Audio()
 
@@ -40,10 +31,10 @@ audio = Audio()
 class MainWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self._initialiseUI()
         self.windowSize = 512
         self.displaySize = 40
         self.buttonSize = 60
+        self._initialiseUI()
     
     def _initialiseUI(self):
         self.setFixedSize(self.windowSize,self.windowSize)
@@ -86,6 +77,12 @@ class MainWindow(QWidget):
         self.buttonC.clicked.connect(self._acceptTime)
         self.buttonC.setDisabled(True)
 
+        self.buttonTest = QPushButton("Run the command that runs the library", self)
+        self.buttonTest.move(500,300)
+        self.buttonTest.setFixedSize(self.buttonSize,self.buttonSize)
+        self.buttonTest.clicked.connect(self.runCommand)
+
+
 
     def _createLineEditTime(self): # creates the Line
         QLabel("Please enter the recording length below (seconds).",self).move(80,190)
@@ -116,7 +113,9 @@ class MainWindow(QWidget):
             self.buttonC.setDisabled(True)
         else:
             print("Error")
-            
+
+    def runCommand():
+        os.system("python Orchestra\main.py Orchestra\input Orchestra\output")
 
 
 def main():
