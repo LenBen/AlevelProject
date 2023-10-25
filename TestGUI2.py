@@ -1,8 +1,9 @@
 import sys
+import subprocess as sp
 import os
 import typing
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QProcess
 from PyQt6.QtGui import (
      QFont,
      QPixmap,
@@ -78,9 +79,8 @@ class MainWindow(QWidget):
         self.buttonC.setDisabled(True)
 
         self.buttonTest = QPushButton("Run the command that runs the library", self)
-        self.buttonTest.move(500,300)
-        self.buttonTest.setFixedSize(self.buttonSize,self.buttonSize)
-        self.buttonTest.clicked.connect(self.runCommand)
+        self.buttonTest.move(300,300)
+        self.buttonTest.clicked.connect(self._runOrchestra)
 
 
 
@@ -114,9 +114,13 @@ class MainWindow(QWidget):
         else:
             print("Error")
 
-    def runCommand():
-        os.system("python Orchestra\main.py Orchestra\input Orchestra\output")
-
+    def _runOrchestra(self):
+        try:
+            a = sp.run(["python", "Orchestra/main.py", "O_Input", "O_Output"])
+            a.check_returncode()
+        except sp.CalledProcessError as err:
+            print(err)
+        
 
 def main():
     app = QApplication(sys.argv)
