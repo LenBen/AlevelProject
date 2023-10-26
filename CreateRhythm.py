@@ -1,8 +1,10 @@
 
 class CreateRhythm:
     def __init__(self) -> None:
-        self.rhythmList = []
-        self.timeSig = ""
+        self.rhythmList : list = []
+        self.timeSig : str = "4/2" # dont forget to reset this value to 0 after debugging!
+        self.bpm : int = 120
+        self.beatLength = 0
 
     def GetMusic(self) -> None:
         with open("O_Output/music.txt", "r") as notes:
@@ -27,8 +29,10 @@ class CreateRhythm:
                     temp = ""
             tempArray.reverse()
             self.rhythmList = tempArray
-            print(self.timeSig)
-            print(self.rhythmList)
+    
+    def setBPM(self, BPM : int):
+        if BPM > 0 and BPM < 280:
+            self.bpm = BPM
         
     def _getTimeSig(self, w: str) -> str:
         i = 0
@@ -49,7 +53,24 @@ class CreateRhythm:
                 self.timeSig += timeSig[j]
         w = w[i:]
         return w
+    
+    def _calculateBeatLength(self):
+        beatsPerSecond = self.bpm / 60
+        self.beatLength = 1 / beatsPerSecond
+
+    def calculateBarLength(self):
+        self._calculateBeatLength()
+        noOfBeats = ""
+        typeOfBeat = ""
+        y = 0
+        while self.timeSig[y] != "/":
+            noOfBeats += self.timeSig[y]
+            y += 1
+        typeOfBeat = self.timeSig[(y +1):]
+        barLength = int(noOfBeats) * self.beatLength
+        print(barLength)
 
 
 rhythm = CreateRhythm()
-rhythm.GetMusic()
+#rhythm.GetMusic()
+rhythm.calculateBarLength()
