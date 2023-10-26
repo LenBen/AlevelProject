@@ -80,6 +80,10 @@ class MainWindow(QWidget):
         self.buttonC.clicked.connect(self._acceptTime)
         self.buttonC.setDisabled(True)
 
+        self.buttond = QPushButton("Enter",self)
+        self.buttond.move(300,455)
+        self.buttond.clicked.connect(self._setbpm)
+
         self.buttonTest = QPushButton("Run the command that runs the library", self)
         self.buttonTest.move(300,300)
         self.buttonTest.clicked.connect(self._runOrchestra)
@@ -94,6 +98,10 @@ class MainWindow(QWidget):
         self.time_edit.move(80,210)
         self.time_edit.textChanged.connect(self._checkIfNotEmpty)
 
+        self.bpm_edit = QLineEdit(self)
+        self.bpm_edit.resize(210,20)
+        self.bpm_edit.move(80,460)
+
     
     def _acceptTime(self):
             t = audio.setRecordTime(self.time_edit.text()) # passes the value of the line edit through to the setter of record_audio
@@ -106,6 +114,17 @@ class MainWindow(QWidget):
                                       QMessageBox.StandardButton.Ok)
             if t: # if the data is correct it updates the text
                 self.time_label.setText(f"The record length is set to {audio.getRecordTime()} seconds")
+    
+    def _setbpm(self):
+        try:
+            t = createRhythm.setBPM(int(self.bpm_edit.text()))
+            print(createRhythm.bpm)
+        except:
+            print("no")
+        try:
+            QMessageBox.information(self, "bpm set to...",f"bpm set to {createRhythm.bpm}",QMessageBox.StandardButton.Ok)
+        except:
+            print("err")
 
     
     def _checkIfNotEmpty(self, text): # checks if the line edit is empty. If so the submit button is disabled
@@ -122,6 +141,7 @@ class MainWindow(QWidget):
             a.check_returncode()
         except sp.CalledProcessError as err:
             print(err)
+    
         
 
 def main():
