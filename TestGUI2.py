@@ -24,9 +24,11 @@ from functools import partial
 
 
 from RecordAndPlay import Audio
+from CreateRhythm import CreateRhythm
 
 
 audio = Audio()
+createRhythm = CreateRhythm()
 
 
 class MainWindow(QWidget):
