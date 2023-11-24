@@ -19,18 +19,23 @@ class getDifference:
         self.timeDiffs = []
         self.sampleRate = audio.getSampleRate()
     
-    def getAudioArray(self):
+    def _getAudioArray(self):
         audio, sampleRate = librosa.load("voice.wav")
         beatTimes = librosa.onset.onset_detect(y=audio, sr=self.sampleRate, units="time")
         return audio, beatTimes
 
     def plotGraph(self):
-        audio, beatTimes = self.getAudioArray()
+        audio, beatTimes = self._getAudioArray()
         plot.figure(figsize=(10,3))
         plot.ylim(-1,1)
-        librosa.display.waveshow(audio, sr=self.sampleRate)
+        librosa.display.waveshow(y=audio, sr=self.sampleRate)
         plot.vlines(beatTimes, -1, 1, colors="r")
         plot.show()
 
+    def getDifferenfce(self):
+        audio, beatTimes = self._getAudioArray()
+        for i in range(len(beatTimes)):
+            
+
 getDiff = getDifference()
-getDiff.plotGraph()
+# getDiff.plotGraph()
