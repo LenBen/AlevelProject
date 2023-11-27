@@ -79,4 +79,10 @@ class CreateRhythm:
             y += 1
         typeOfBeat = self.timeSig[(y +1):]
         barLength = int(noOfBeats) * self.beatLength
+    
+    def calculateDiffs(self) -> list:
+        length = []
+        for i in range(len(self.rhythmList)):
+            length.append(self.rhythmList * self.beatLength)
+        return length
 

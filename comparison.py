@@ -40,10 +40,23 @@ class getDifference:
             length.append(self.timeDiffs[i] * cr.beatLength)
         self.timeDiffs = length
 
+    def compareTimes(self):
+        modelRhythm = cr.calculateDiffs()
+        if not(len(modelRhythm) and len(self.timeDiffs)):
+            raise(RuntimeError)
+        value = []
+        for i in range(len(modelRhythm)):
+            if (self.timeDiffs[i] >= modelRhythm[i] + 0.3) and (self.timeDiffs[i] <= modelRhythm[i] -0.3):
+                value.append(1)
+            elif (self.timeDiffs[i] >= modelRhythm[i] + 0.5) and (self.timeDiffs[i] <= modelRhythm[i] - 0.5):
+                value.append(2)
+            elif (self.timeDiffs[i] >= modelRhythm[i] + 0.8) and (self.timeDiffs[i] <= modelRhythm[i] - 0.8):
+                value.append(3)
+
 
     
             
 
 getDiff = getDifference()
-getDiff.getDifference()
-#getDiff.plotGraph()
+# getDiff.getDifference()
+getDiff.plotGraph()
