@@ -6,6 +6,9 @@ from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
+    QLabel,
+    QVBoxLayout,
+    QMessageBox,
 )
 from PyQt6.QtGui import(
     QAction,
@@ -34,18 +37,37 @@ class MainWindow(QMainWindow):
         self.show()
     
     def setUpMainWindow(self):
-        pass
+        infoLabel = QLabel("Test test test test")
+        infoLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        main_v_box = QVBoxLayout()
+        main_v_box.addWidget(infoLabel)
+
+        container = QWidget()
+        container.setLayout(main_v_box)
+        self.setCentralWidget(container)
 
     def createActions(self):
         self.quit_act = QAction("&Quit")
         self.quit_act.setShortcut("Ctrl+Q")
         self.quit_act.triggered.connect(self.close)
 
+        self.about = QAction("&About")
+        self.about.setShortcut("Ctrl+A")
+        self.about.triggered.connect(self.aboutt)
+
+
     def createMenu(self):
         self.menuBar().setNativeMenuBar(False)
 
         file_menu = self.menuBar().addMenu("File")
         file_menu.addAction(self.quit_act)
+
+    def aboutt(self):
+        QMessageBox.about(self, "About Rhythm Checker",
+                          """<p>The rhythm checker program attempt</p>
+                          <p>Caption</p>
+                          """)
 
 def run():
     app = QApplication(sys.argv)
