@@ -1,15 +1,25 @@
-
+import subprocess as sp
 class CreateRhythm:
     def __init__(self) -> None:
         self.rhythmList : list = []
-        self.timeSig : str = "4/2" # dont forget to reset this value to 0 after debugging!
+        self.timeSig : str = "" 
         self.bpm : int = 120
-        self.beatLength = 0
+        self.beatLength : float = 0 
+        self.lengthArray = []
+
+    def callOrchestra(*args) -> None:
+        try:
+            a = sp.run(["python", "Orchestra/main.py", "O_Input", "O_Output"])
+            a.check_returncode()
+        except sp.CalledProcessError as err:
+            print(err)
 
     def GetMusic(self) -> None:
+        self.callOrchestra()
         with open("O_Output/music.txt", "r") as notes:
             w = notes.read()
-            w = self._getTimeSig(w)
+            if w[3] == "\\":
+                w = self._getTimeSig(w)
             letter = False
             for i in w:
                 if not(ord(i) > 46 and ord(i) < 58):
@@ -29,6 +39,7 @@ class CreateRhythm:
                     temp = ""
             tempArray.reverse()
             self.rhythmList = tempArray
+        self.createLengthArray()
     
     def setBPM(self, BPM : int):
         if BPM > 0 and BPM < 280:
@@ -55,8 +66,8 @@ class CreateRhythm:
         return w
     
     def _calculateBeatLength(self):
-        beatsPerSecond = self.bpm / 60
-        self.beatLength = 1 / beatsPerSecond
+        beatsPerSecond = float(self.bpm / 60)
+        self.beatLength = float(1 / beatsPerSecond)
 
     def calculateBarLength(self):
         self._calculateBeatLength()
@@ -68,9 +79,4 @@ class CreateRhythm:
             y += 1
         typeOfBeat = self.timeSig[(y +1):]
         barLength = int(noOfBeats) * self.beatLength
-        print(barLength)
 
-
-rhythm = CreateRhythm()
-#rhythm.GetMusic()
-rhythm.calculateBarLength()
