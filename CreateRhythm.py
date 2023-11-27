@@ -3,7 +3,7 @@ class CreateRhythm:
     def __init__(self) -> None:
         self.rhythmList : list = []
         self.timeSig : str = "" 
-        self.bpm : int = 120
+        self.bpm : float = 120
         self.beatLength : float = 0 
         self.lengthArray = []
 
