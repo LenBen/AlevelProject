@@ -24,6 +24,7 @@ class getDifference:
         plot.ylim(-1,1)
         librosa.display.waveshow(y=audio, sr=self.sampleRate)
         plot.vlines(beatTimes, -1, 1, colors="r")
+        print(beatTimes)
         plot.show()
 
     def getDifference(self):
@@ -34,9 +35,15 @@ class getDifference:
         print(self.timeDiffs)
         cr.GetMusic()
         cr._calculateBeatLength()
-        print(cr.beatLength)
-        print(cr.lengthArray)
+        length = []
+        for i in range(len(self.timeDiffs)):
+            length.append(self.timeDiffs[i] * cr.beatLength)
+        self.timeDiffs = length
+
+
+    
             
 
 getDiff = getDifference()
 getDiff.getDifference()
+#getDiff.plotGraph()
