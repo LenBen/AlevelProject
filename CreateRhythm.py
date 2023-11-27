@@ -79,9 +79,4 @@ class CreateRhythm:
             y += 1
         typeOfBeat = self.timeSig[(y +1):]
         barLength = int(noOfBeats) * self.beatLength
-        # print(barLength)
 
-    def createLengthArray(self):
-        print("called")
-        for i in range(len(self.rhythmList)):
-            self.lengthArray.append(float(self.rhythmList[i]) * self.beatLength)
