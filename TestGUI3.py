@@ -10,6 +10,8 @@ from PyQt6.QtWidgets import (
     QStatusBar,
     QPushButton,
     QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
 )
 from PyQt6.QtGui import(
     QAction,
@@ -60,6 +62,11 @@ class MainWindow(QMainWindow):
         self.quit_act.setShortcut("Ctrl+Q")
         self.quit_act.triggered.connect(self.close)
 
+        self.about = QAction("&About")
+        self.about.setShortcut("Ctrl+A")
+        self.about.triggered.connect(self.aboutt)
+
+
     def createMenu(self):
         self.menuBar().setNativeMenuBar(False)
 
@@ -72,6 +79,11 @@ class MainWindow(QMainWindow):
         statusBar = QStatusBar()
         statusBar.showMessage("The rhythm checker       2023 Lenny S")
         self.setStatusBar(statusBar)
+    def aboutt(self):
+        QMessageBox.about(self, "About Rhythm Checker",
+                          """<p>The rhythm checker program attempt</p>
+                          <p>Caption</p>
+                          """)
 
 def run():
     app = QApplication(sys.argv)
