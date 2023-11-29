@@ -26,3 +26,8 @@ class feedback():
             match i:
                 case 1:
                     x += 1 / len(self.feedbackValues)
+                case 2:
+                    x += 1 / (2 * len(self.feedbackValues))
+                case 3:
+                    x += 1 / (3 * len(self.feedbackValues))
+        self.score = x * 100
