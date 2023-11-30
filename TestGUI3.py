@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         hBox.addWidget(mainHeader)
         hBox.addWidget(startButton)
 
-        self.setCentralWidget(hBox)
+        # self.setCentralWidget(hBox)
 
     def createActions(self):
         self.quit_act = QAction("&Quit")
