@@ -38,7 +38,7 @@ class Audio:
       else:
          return False
    
-   def getRecordTime() -> int: # getter of record_audio
+   def getRecordTime(*args) -> int: # getter of record_audio
       global record_audio
       return record_audio
    
