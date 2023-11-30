@@ -25,6 +25,8 @@ from PyQt6.QtCore import (
     QSize,
 )
 
+from step1 import step1Window
+
 class MenuScreen(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -58,6 +60,13 @@ class MenuScreen(QWidget):
         self.startButton = QPushButton("Start the rhythm checker!",self)
         self.startButton.setFixedSize(400, 200)
         self.startButton.move(self.windowSize//8,self.windowSize//3)
+        self.startButton.clicked.connect(self._callOtherPage)
+
+    def _callOtherPage(self):
+        # app = QApplication(sys.argv)
+        # sys.exit(app.exec())
+        self.window = step1Window()
+        self.window.show()
 
 def main():
     app = QApplication(sys.argv)
