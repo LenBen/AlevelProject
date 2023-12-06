@@ -32,7 +32,9 @@ class step1Window(QWidget):
         self._initialiseUI()
     
     def _initialiseUI(self):
-        self.setWindowTitle("The rhythm checker")
+        self.setFixedSize(self.windowSize, self.windowSize)
+        self.setWindowTitle("The Rhythm Checker")
+        self.setWindowIcon(QIcon("appLogo.png"))
         self._setUpMainWindow()
         self.show()
     
@@ -40,6 +42,18 @@ class step1Window(QWidget):
         self._createLabels()
     
     def _createLabels(self):
-        label1 = QLabel()
-        label1.setText("STep1")
-        label1.move(self.windowSize//4,30)
+        title_label = QLabel(self)
+        title_label.setText("The Rhythm 1")
+        title_label.setFont(QFont("Arial", 35))
+        title_label.move(self.windowSize//12,30)
+    
+    def _createButtons(self):
+        self.nextButton = QPushButton("Next", self)
+
+def main():
+    app = QApplication(sys.argv)
+    window = step1Window()
+    sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main()

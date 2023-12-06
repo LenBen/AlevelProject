@@ -26,6 +26,7 @@ from PyQt6.QtCore import (
 )
 
 from step1 import step1Window
+from TestGUI2 import MainWindow
 
 class MenuScreen(QWidget):
     def __init__(self) -> None:
@@ -63,9 +64,8 @@ class MenuScreen(QWidget):
         self.startButton.clicked.connect(self._callOtherPage)
 
     def _callOtherPage(self):
-        # app = QApplication(sys.argv)
-        # sys.exit(app.exec())
         self.window = step1Window()
+        # self.window = MainWindow()
         self.window.show()
 
 def main():
