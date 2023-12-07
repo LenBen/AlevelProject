@@ -38,7 +38,7 @@ class MenuScreen(QWidget):
     def _initialiseUI(self):
         self.setFixedSize(self.windowSize, self.windowSize)
         self.setWindowTitle("The Rhythm Checker")
-        self.setWindowIcon(QIcon("appLogo.png"))
+        self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
     
@@ -57,9 +57,17 @@ class MenuScreen(QWidget):
         desc_label.setFont(QFont("Arial",10))
         desc_label.move(self.windowSize//4, 95)
 
+        dec2_label = QLabel(self)
+        dec2_label.setText("Check you are playing the correct rhythm!")
+        dec2_label.setFont(QFont("Arial",8))
+        dec2_label.move(self.windowSize//4,115)
+
+        button_label = QLabel
+
     def _createButton(self):
         self.startButton = QPushButton("Start the rhythm checker!",self)
         self.startButton.setFixedSize(400, 200)
+        self.startButton.setFont(QFont("Arial", 20))
         self.startButton.move(self.windowSize//8,self.windowSize//3)
         self.startButton.clicked.connect(self._callOtherPage)
 
