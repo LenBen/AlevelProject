@@ -118,13 +118,10 @@ class MainWindow(QWidget):
     def _setbpm(self):
         try:
             t = createRhythm.setBPM(int(self.bpm_edit.text()))
-            print(createRhythm.bpm)
-        except:
-            print("no")
-        try:
+            # print(createRhythm.bpm)
             QMessageBox.information(self, "bpm set to...",f"bpm set to {createRhythm.bpm}",QMessageBox.StandardButton.Ok)
         except:
-            print("err")
+            print("error")
 
     
     def _checkIfNotEmpty(self, text): # checks if the line edit is empty. If so the submit button is disabled
