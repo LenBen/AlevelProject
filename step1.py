@@ -56,10 +56,20 @@ class step1Window(QWidget):
         self.nextButton.setFixedSize(100,50)
         self.nextButton.move(400,450)
         self.nextButton.clicked.connect(self._callNextPage)
+
+        self.uploadButton = QPushButton("",self)
+        self.uploadButton.setIcon(QIcon("Images\\upload.png"))
+        self.uploadButton.setIconSize(QSize(400,250))
+        self.uploadButton.setFixedSize(400,250)
+        self.uploadButton.move(self.windowSize//8, self.windowSize//4)
+        self.uploadButton.clicked.connect(self._uploadFile)
     
     def _callNextPage(self):
         self.window = MainWindow()
         self.window.show()
+    
+    def _uploadFile(self):
+        pass
 
 def main():
     app = QApplication(sys.argv)
