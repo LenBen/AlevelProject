@@ -26,6 +26,8 @@ from PyQt6.QtCore import (
     QSize,
 )
 
+from step4 import step4Window
+
 class step3Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -96,7 +98,8 @@ class step3Window(QWidget):
         pass
 
     def _callNextPage(self):
-        pass
+        self.step4 = step4Window()
+        self.step4.show()
 
 def main():
     app = QApplication(sys.argv)
