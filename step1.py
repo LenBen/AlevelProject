@@ -50,6 +50,8 @@ class step1Window(QWidget):
         title_label.setText("The Rhythm 1")
         title_label.setFont(QFont("Arial", 35))
         title_label.move(self.windowSize//12,30)
+
+        
     
     def _createButtons(self):
         self.nextButton = QPushButton("Next", self)
