@@ -7,6 +7,9 @@ class CreateRhythm:
         self.beatLength : float = 0 
         self.lengthArray = []
 
+    def getBPM(self):
+        return self.bpm
+
     def callOrchestra(*args) -> None:
         try:
             a = sp.run(["python", "Orchestra/main.py", "O_Input", "O_Output"])
