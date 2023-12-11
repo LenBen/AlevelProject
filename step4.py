@@ -42,13 +42,22 @@ class step4Window(QWidget):
 
     def _setUpMainWindow(self):
         self._createLabels()
-        # self._createButtons()
+        self._createButtons()
         
     def _createLabels(self):
         titleLabel = QLabel(self)
         titleLabel.setText("Step 4")
         titleLabel.setFont(QFont("Arial", 35))
         titleLabel.move(self.windowSize//3, 30)
+
+    def _createButtons(self):
+        self.nextButton = QPushButton("Finish", self)
+        self.nextButton.setFixedSize(100,50)
+        self.nextButton.move(400,450)
+        self.nextButton.clicked.connect(self._finishRhythmChecker)
+    
+    def _finishRhythmChecker(self):
+        pass
 
 def main():
     app = QApplication(sys.argv)
