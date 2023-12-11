@@ -6,10 +6,18 @@ from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
+    QLabel,
+    QStatusBar,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
 )
 from PyQt6.QtGui import(
     QAction,
-    QIcon
+    QIcon,
+    QFont,
+
 )
 
 from PyQt6.QtCore import (
@@ -26,26 +34,58 @@ class MainWindow(QMainWindow):
     def initialiseUI(self):
         self.setMinimumSize(450, 350)
         self.setWindowTitle("The test GUI3 - GUI3 test")
-        self.setWindowIcon(QIcon("O_Input/music.png"))
+        self.setWindowIcon(QIcon("appLogo.png"))
 
         self.setUpMainWindow()
         self.createActions()
         self.createMenu()
+        self.createStatusBar()
         self.show()
     
     def setUpMainWindow(self):
-        pass
+        hBox = QHBoxLayout()
+
+        mainHeader = QLabel(self)
+        mainHeader.setText("The Rhythm Checker")
+        mainHeader.setFont(QFont("Arial", 25))
+
+        startButton = QPushButton()
+        startButton.setText("Start the rhythm checker")
+        startButton.setFont(QFont("Arial", 40))
+
+        # self.setCentralWidget(startButton)
+        hBox.addWidget(mainHeader)
+        hBox.addWidget(startButton)
+
+        # self.setCentralWidget(hBox)
 
     def createActions(self):
         self.quit_act = QAction("&Quit")
         self.quit_act.setShortcut("Ctrl+Q")
         self.quit_act.triggered.connect(self.close)
 
+        self.about = QAction("&About")
+        self.about.setShortcut("Ctrl+A")
+        self.about.triggered.connect(self.aboutt)
+
+
     def createMenu(self):
         self.menuBar().setNativeMenuBar(False)
 
         file_menu = self.menuBar().addMenu("File")
         file_menu.addAction(self.quit_act)
+
+        help_menu = self.menuBar().addMenu("&Help")
+    
+    def createStatusBar(self):
+        statusBar = QStatusBar()
+        statusBar.showMessage("The rhythm checker       2023 Lenny S")
+        self.setStatusBar(statusBar)
+    def aboutt(self):
+        QMessageBox.about(self, "About Rhythm Checker",
+                          """<p>The rhythm checker program attempt</p>
+                          <p>Caption</p>
+                          """)
 
 def run():
     app = QApplication(sys.argv)
