@@ -27,7 +27,7 @@ from PyQt6.QtCore import (
 )
 
 from CreateRhythm import CreateRhythm
-from TestGUI2 import MainWindow
+from step3 import step3Window
 
 createRhythm = CreateRhythm()
 
@@ -85,8 +85,8 @@ class step2Window(QWidget):
     
     def _callNextPage(self):
         if self.checkedBPM:
-            self.mainWindow = MainWindow()
-            self.mainWindow.show()
+            self.step3 = step3Window()
+            self.step3.show()
         elif not self.checkedBPM:
             QMessageBox.information(self,"Checked BPM?","""
                                             <p>Have you checked the BPM?</P>
