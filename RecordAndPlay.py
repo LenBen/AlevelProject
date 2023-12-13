@@ -15,20 +15,22 @@ class Audio:
    
    def setRecordTime(self, record_time) -> bool: # setter of record_audio
       global record_audio
-      nums = []
-      rec_time = ""
+      # nums = []
+      # rec_time = ""
 
-      for n in range(len(record_time)): # turn the input into an array
-         nums.append(record_time[n])
+      # record_time = str(record_time)
 
-      for n in range(len(nums)): # ensure the contents of the array are valid
-         if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
-            return False
+      # for n in range(len(record_time)): # turn the input into an array
+      #    nums.append(record_time[n])
+
+      # for n in range(len(nums)): # ensure the contents of the array are valid
+      #    if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
+      #       return False
       
-      for i in range(len(nums)): # turn the array back into a string
-         rec_time += str(nums[i])
+      # for i in range(len(nums)): # turn the array back into a string
+      #    rec_time += str(nums[i])
       
-      record_time = int(rec_time) # turn the string into an integer
+      # record_time = int(rec_time) # turn the string into an integer
          
       record_time = int(record_time)
 

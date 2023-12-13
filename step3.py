@@ -27,6 +27,9 @@ from PyQt6.QtCore import (
 )
 
 from step4 import step4Window
+from RecordAndPlay import Audio
+
+audio = Audio()
 
 class step3Window(QWidget):
     def __init__(self) -> None:
@@ -68,7 +71,7 @@ class step3Window(QWidget):
         self.recordButton.setIconSize(QSize(400,250))
         self.recordButton.setFixedSize(400,250)
         self.recordButton.move(self.windowSize//8, self.windowSize//4)
-        self.recordButton.clicked.connect(self._recordAudio)
+        self.recordButton.clicked.connect(audio.record)
 
         self.submitButton = QPushButton("SUBMIT",self)
         self.submitButton.setFixedSize(80,30)
@@ -90,12 +93,18 @@ class step3Window(QWidget):
         else:
             print("Error")
 
-    
-    def _recordAudio(self):
-        pass
-
     def _setTime(self):
-        pass
+        try:
+            time = int(self.timeEdit.text())
+            value = audio.setRecordTime(time)
+            if value: 
+                QMessageBox.information(self,"Accepted",
+                                        f"""<p>Value accepted</p>
+                                         <p>Time changed to {audio.getRecordTime()}s """,
+                                        QMessageBox.StandardButton.Ok)
+            else: print("NO")
+        except:
+            print("Exception")
 
     def _callNextPage(self):
         self.step4 = step4Window()
