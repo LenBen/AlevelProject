@@ -102,9 +102,14 @@ class step3Window(QWidget):
                                         f"""<p>Value accepted</p>
                                          <p>Time changed to {audio.getRecordTime()}s """,
                                         QMessageBox.StandardButton.Ok)
-            else: print("NO")
+            else:
+                QMessageBox.critical(self,"Not Accepted",
+                                     """<p>The value given is not accepted</p> """,
+                                     QMessageBox.StandardButton.Ok)
         except:
-            print("Exception")
+            QMessageBox.critical(self,"Not Accepted",
+                                     """<p>The value given is not accepted</p> """,
+                                     QMessageBox.StandardButton.Ok)
 
     def _callNextPage(self):
         self.step4 = step4Window()
