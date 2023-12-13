@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QMessageBox,
+    QFileDialog,
 )
 from PyQt6.QtGui import(
     QAction,
@@ -23,7 +24,10 @@ from PyQt6.QtGui import(
 from PyQt6.QtCore import (
     Qt,
     QSize,
+    QUrl,
 )
+
+from PIL import Image
 
 from step2 import step2Window
 
@@ -68,8 +72,10 @@ class step1Window(QWidget):
         self.window.show()
     
     def _uploadFile(self):
-        pass
-
+        rhythmFile = QFileDialog.getOpenFileUrl(self, "Open Rhythm File",
+                                                QUrl("C://"), "Image Files(*.jpg *.jpeg *.png)")
+        
+        image = Image.open(QUrl.toString(rhythmFile[0], QUrl.UrlFormattingOption.RemoveQuery))
 def main():
     app = QApplication(sys.argv)
     window = step1Window()
