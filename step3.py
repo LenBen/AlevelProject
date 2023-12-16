@@ -36,6 +36,7 @@ class step3Window(QWidget):
         super().__init__()
         self.windowSize = 512
         self.checkedBPM = False
+        self.checkedRecLength = False
         self._initialiseUI()
     
     def _initialiseUI(self):
@@ -95,17 +96,26 @@ class step3Window(QWidget):
 
     def _setTime(self):
         try:
-            time = int(self.timeEdit.text())
-            value = audio.setRecordTime(time)
-            if value: 
-                QMessageBox.information(self,"Accepted",
+            if self.checkedRecLength:
+                time = int(self.timeEdit.text())
+                value = audio.setRecordTime(time)
+                if value: 
+                    QMessageBox.information(self,"Accepted",
                                         f"""<p>Value accepted</p>
-                                         <p>Time changed to {audio.getRecordTime()}s """,
+                                         <p>Time changed to {audio.getRecordTime()}s</p> """,
                                         QMessageBox.StandardButton.Ok)
-            else:
-                QMessageBox.critical(self,"Not Accepted",
-                                     """<p>The value given is not accepted</p> """,
+                else:
+                    QMessageBox.critical(self,"Not Accepted",
+                                     """<p>The value given is out of range</p> """,
                                      QMessageBox.StandardButton.Ok)
+            else:
+                QMessageBox.question(self,"Are you sure?",
+                                     f"""<p>The recording length is automatically set according to the information given</p>
+                                     <p>The current recording length is {audio.getRecordTime()}s</p>
+                                     <p>Changing the lenght of the recording may have an effect on the rhythm comparison</p>
+                                      <p>If you are sure you want to change the value submit again</p> """,
+                                      QMessageBox.StandardButton.Yes)
+                self.checkedRecLength = True
         except:
             QMessageBox.critical(self,"Not Accepted",
                                      """<p>The value given is not accepted</p> """,

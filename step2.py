@@ -27,9 +27,13 @@ from PyQt6.QtCore import (
 )
 
 from CreateRhythm import CreateRhythm
+from RecordAndPlay import Audio
+
 from step3 import step3Window
 
+
 createRhythm = CreateRhythm()
+audio = Audio()
 
 class step2Window(QWidget):
     def __init__(self) -> None:
@@ -85,6 +89,8 @@ class step2Window(QWidget):
     
     def _callNextPage(self):
         if self.checkedBPM:
+            self.callFuncs()
+
             self.step3 = step3Window()
             self.step3.show()
         elif not self.checkedBPM:
@@ -115,6 +121,13 @@ class step2Window(QWidget):
                                       """<p>The characters inputted are invalid</p>
                                       <p>Please only input numbers</p>""",
                                       QMessageBox.StandardButton.Ok)
+    
+    def callFuncs(*args):
+        createRhythm.GetMusic()
+        createRhythm.calculateBarLength()
+        createRhythm.calculateRecLength()
+        audio.setRecordTime(createRhythm)
+
     
 
 
