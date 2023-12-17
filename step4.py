@@ -4,28 +4,15 @@ from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QWidget,
     QLabel,
-    QStatusBar,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
-    QMessageBox,
-    QLineEdit
 )
 from PyQt6.QtGui import(
-    QAction,
     QIcon,
     QFont,
 
 )
-
-from PyQt6.QtCore import (
-    Qt,
-    QSize,
-)
-
 class step4Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -57,7 +44,7 @@ class step4Window(QWidget):
         self.nextButton.clicked.connect(self._finishRhythmChecker)
     
     def _finishRhythmChecker(self):
-        pass
+        QApplication.closeAllWindows()
 
 def main():
     app = QApplication(sys.argv)
