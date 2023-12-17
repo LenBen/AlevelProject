@@ -4,26 +4,16 @@ from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QWidget,
     QLabel,
-    QStatusBar,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
     QMessageBox,
     QLineEdit
 )
 from PyQt6.QtGui import(
-    QAction,
     QIcon,
     QFont,
 
-)
-
-from PyQt6.QtCore import (
-    Qt,
-    QSize,
 )
 
 from CreateRhythm import CreateRhythm
@@ -123,10 +113,17 @@ class step2Window(QWidget):
                                       QMessageBox.StandardButton.Ok)
     
     def callFuncs(*args):
-        createRhythm.GetMusic()
-        createRhythm.calculateBarLength()
-        createRhythm.calculateRecLength()
-        audio.setRecordTime(createRhythm)
+        try:
+            createRhythm.GetMusic()
+            print("1")
+            createRhythm.calculateBarLength()
+            print("2")
+            createRhythm.calculateRecLength()
+            print("3")
+            audio.setRecordTime(createRhythm.recLength)
+            print("4")
+        except:
+            print("error")
 
     
 
