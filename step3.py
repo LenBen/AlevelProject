@@ -4,25 +4,19 @@ from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QWidget,
     QLabel,
-    QStatusBar,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
     QMessageBox,
     QLineEdit
 )
 from PyQt6.QtGui import(
-    QAction,
     QIcon,
-    QFont,
+    QFont
 
 )
 
 from PyQt6.QtCore import (
-    Qt,
     QSize,
 )
 
@@ -35,8 +29,8 @@ class step3Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.windowSize = 512
-        self.checkedBPM = False
         self.checkedRecLength = False
+        self.recorded = False
         self._initialiseUI()
     
     def _initialiseUI(self):
@@ -72,7 +66,7 @@ class step3Window(QWidget):
         self.recordButton.setIconSize(QSize(400,250))
         self.recordButton.setFixedSize(400,250)
         self.recordButton.move(self.windowSize//8, self.windowSize//4)
-        self.recordButton.clicked.connect(audio.record)
+        self.recordButton.clicked.connect(self._record)
 
         self.submitButton = QPushButton("SUBMIT",self)
         self.submitButton.setFixedSize(80,30)
@@ -93,6 +87,10 @@ class step3Window(QWidget):
             self.submitButton.setDisabled(True)
         else:
             print("Error")
+    
+    def _record(self):
+        audio.record()
+        self.recorded = True
 
     def _setTime(self):
         try:
@@ -122,8 +120,14 @@ class step3Window(QWidget):
                                      QMessageBox.StandardButton.Ok)
 
     def _callNextPage(self):
-        self.step4 = step4Window()
-        self.step4.show()
+        if self.checkedRecLength and self.recorded:
+            self.step4 = step4Window()
+            self.step4.show()
+        else:
+            QMessageBox.critical(self,"Not Recording",
+                                     """<p>The rhythm checker can't check when there is no recording!</p> """,
+                                     QMessageBox.StandardButton.Ok)
+
 
 def main():
     app = QApplication(sys.argv)
