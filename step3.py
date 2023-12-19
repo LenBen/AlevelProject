@@ -120,7 +120,7 @@ class step3Window(QWidget):
                                      QMessageBox.StandardButton.Ok)
 
     def _callNextPage(self):
-        if self.checkedRecLength and self.recorded:
+        if self.recorded:
             self.step4 = step4Window()
             self.step4.show()
         else:

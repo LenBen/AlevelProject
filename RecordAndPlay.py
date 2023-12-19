@@ -13,7 +13,7 @@ class Audio:
    def __init__(self) -> None:
        pass
    
-   def setRecordTime(self, record_time) -> bool: # setter of record_audio
+   def setRecordTime(self, record_time: float) -> bool: # setter of record_audio
       global record_audio
       # nums = []
       # rec_time = ""
@@ -32,7 +32,7 @@ class Audio:
       
       # record_time = int(rec_time) # turn the string into an integer
          
-      record_time = int(record_time)
+      record_time = float(record_time)
 
       if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
          record_audio = record_time

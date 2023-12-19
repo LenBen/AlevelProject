@@ -93,9 +93,9 @@ class CreateRhythm:
         return length
     
     def calculateRecLength(self) -> float:
-        length = self.calculateDiffs()
-        print(length)
-        for i in range(len(length)):
-            self.recLength += length[i]
-        self.recLength += 1.5 # Take into account a slight error in time
+        for i in range(len(self.rhythmList)):
+            self.recLength += (self.beatLength / float(self.rhythmList[i])) * 2
+        self.recLength += 0.45 # factor in for the delay of starting
+        print(self.recLength)
+
 

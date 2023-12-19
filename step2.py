@@ -79,10 +79,12 @@ class step2Window(QWidget):
     
     def _callNextPage(self):
         if self.checkedBPM:
-            self.callFuncs()
-
-            self.step3 = step3Window()
-            self.step3.show()
+            working = self.callFuncs()
+            if working:
+                self.step3 = step3Window()
+                self.step3.show()
+            else:
+                QMessageBox.critical(self,"Critical Error","""There is a critical error try the program again""")
         elif not self.checkedBPM:
             QMessageBox.information(self,"Checked BPM?","""
                                             <p>Have you checked the BPM?</P>
@@ -122,8 +124,9 @@ class step2Window(QWidget):
             print("3")
             audio.setRecordTime(createRhythm.recLength)
             print("4")
+            return True
         except:
-            print("error")
+            print("error") 
 
     
 
