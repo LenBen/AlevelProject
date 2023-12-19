@@ -86,15 +86,35 @@ class CreateRhythm:
         typeOfBeat = self.timeSig[(y +1):]
         barLength = int(noOfBeats) * self.beatLength
     
-    def calculateDiffs(self) -> list: # calculates the 
-        length = []
+    # def __calculateDiffs(self) -> list: # calculates the 
+    #     length = []
+    #     for i in range(len(self.rhythmList)):
+    #         length.append(float(self.rhythmList[i]) * self.beatLength)
+    #         if i > 0:
+    #             length[i] -= float(self.rhythmList[i-1])
+    #     return length
+
+    # def calculateDiffs(self):
+    #     points = []
+    #     for i in range(len(self.rhythmList)):
+    #         if i > 0:
+    #             points.append(self.beatLength / float(self.rhythmList[i]))
+    #             points[i] += float(self.rhythmList[i-1])
+    #         else:
+    #             pass
+    #     print(points)
+    #     return points
+        
+    def calculateTimeOfNotes(self, *args):
+        recLength = []
         for i in range(len(self.rhythmList)):
-            length.append(float(self.rhythmList[i]) * self.beatLength)
-        return length
+            recLength.append((self.beatLength / float(self.rhythmList[i])) * 2)
+        return recLength
     
     def calculateRecLength(self) -> float:
-        for i in range(len(self.rhythmList)):
-            self.recLength += (self.beatLength / float(self.rhythmList[i])) * 2
+        recLength = self.calculateTimeOfNotes()
+        for i in range(len(recLength)):
+            self.recLength += float(recLength[i])
         self.recLength += 0.45 # factor in for the delay of starting
         print(self.recLength)
 
