@@ -10,7 +10,7 @@ cr = CreateRhythm()
 
 class getDifference:
     def __init__(self) ->  None:
-        self.timeDiffs = []
+        self.score = 0
         self.sampleRate = audio.getSampleRate()
     
     def _getAudioArray(self):
@@ -23,7 +23,7 @@ class getDifference:
         modelArray, b = self.getModelTimes()
         plot.figure(figsize=(10,3))
         plot.ylim(-1,1)
-        librosa.display.waveshow(y=audio, sr=self.sampleRate)
+        # librosa.display.waveshow(y=audio, sr=self.sampleRate)
         plot.vlines(beatTimes, -1, 1, colors="r")
         plot.vlines(modelArray, -1, 1, colors="g")
         print(beatTimes)
@@ -67,18 +67,20 @@ class getDifference:
             score += 1 / value[i]
         score *= 100
         score /= 4
-        print(score)
+        self.score = score
 
+def main():
 
             
-cr.GetMusic()
-cr.calculateBarLength()
-# cr.calculateRecLength()
+    cr.GetMusic()
+    cr.calculateBarLength()
+    # cr.calculateRecLength()
 
+    getDiff = getDifference()
+    getDiff.plotGraph()
 
-getDiff = getDifference()
-# getDiff.getDifference()
-# getDiff.plotGraph()
+    # getDiff.getModelTimes()
+    # getDiff.compareTimes()
 
-getDiff.getModelTimes()
-getDiff.compareTimes()
+if __name__ =="__main__":
+    main()

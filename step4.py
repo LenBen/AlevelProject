@@ -13,6 +13,14 @@ from PyQt6.QtGui import(
     QFont,
 
 )
+
+from comparison import getDifference
+from CreateRhythm import CreateRhythm
+
+gd = getDifference()
+
+cr = CreateRhythm()
+
 class step4Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -37,16 +45,37 @@ class step4Window(QWidget):
         titleLabel.setFont(QFont("Arial", 35))
         titleLabel.move(self.windowSize//3, 30)
 
+        scoreLabel = QLabel(self)
+        scoreLabel.setText(f"Your score is: {gd.score}%")
+        scoreLabel.setFont(QFont("Arial", 28))
+        scoreLabel.move(self.windowSize//5, 80)
+
     def _createButtons(self):
         self.nextButton = QPushButton("Finish", self)
         self.nextButton.setFixedSize(100,50)
         self.nextButton.move(400,450)
         self.nextButton.clicked.connect(self._finishRhythmChecker)
+
+        self.showFeedback = QPushButton("Show feedback", self)
+        self.showFeedback.setFixedSize(150,75)
+        self.showFeedback.move(170,200)
+        self.showFeedback.clicked.connect(self._showFeedback)
+
+        self.showGraph = QPushButton("Show Graph Comparing", self)
+        self.showGraph.setFixedSize(150,75)
+        self.showGraph.move(170, 275)
+        self.showGraph.clicked.connect(gd.plotGraph)
     
     def _finishRhythmChecker(self):
         QApplication.closeAllWindows()
+    
+    def _showFeedback(self):
+        pass
 
 def main():
+    cr.GetMusic()
+    cr.calculateBarLength()
+
     app = QApplication(sys.argv)
     window = step4Window()
     sys.exit(app.exec())
