@@ -6,18 +6,19 @@ class CreateRhythm:
         self.bpm : float = 120
         self.beatLength : float = 0 
         self.lengthArray = []
+        self.recLength = 0
 
-    def getBPM(self):
+    def getBPM(self): # Getter for the BPM
         return self.bpm
 
-    def callOrchestra(*args) -> None:
+    def callOrchestra(*args) -> None: # Calls the orchestra library
         try:
             a = sp.run(["python", "Orchestra/main.py", "O_Input", "O_Output"])
             a.check_returncode()
         except sp.CalledProcessError as err:
             print(err)
 
-    def GetMusic(self) -> None:
+    def GetMusic(self) -> None: # adds the rhythms to the rhythm list
         self.callOrchestra()
         with open("O_Output/music.txt", "r") as notes:
             w = notes.read()
@@ -42,13 +43,13 @@ class CreateRhythm:
                     temp = ""
             tempArray.reverse()
             self.rhythmList = tempArray
-        self.createLengthArray()
+        # self.createLengthArray()
     
-    def setBPM(self, BPM : int):
+    def setBPM(self, BPM : int): # setter for BPM
         if BPM > 0 and BPM < 280:
             self.bpm = BPM
         
-    def _getTimeSig(self, w: str) -> str:
+    def _getTimeSig(self, w: str) -> str: # Removes the rime signature from the orchestra output and stores it
         i = 0
         timeSig = ''
         write = False
@@ -68,7 +69,7 @@ class CreateRhythm:
         w = w[i:]
         return w
     
-    def _calculateBeatLength(self):
+    def _calculateBeatLength(self): # Caluculates the lenght of a beat in seconds
         beatsPerSecond = float(self.bpm / 60)
         self.beatLength = float(1 / beatsPerSecond)
 
@@ -77,9 +78,44 @@ class CreateRhythm:
         noOfBeats = ""
         typeOfBeat = ""
         y = 0
+        if self.timeSig == "":
+            return
         while self.timeSig[y] != "/":
             noOfBeats += self.timeSig[y]
             y += 1
         typeOfBeat = self.timeSig[(y +1):]
         barLength = int(noOfBeats) * self.beatLength
+    
+    # def __calculateDiffs(self) -> list: # calculates the 
+    #     length = []
+    #     for i in range(len(self.rhythmList)):
+    #         length.append(float(self.rhythmList[i]) * self.beatLength)
+    #         if i > 0:
+    #             length[i] -= float(self.rhythmList[i-1])
+    #     return length
+
+    # def calculateDiffs(self):
+    #     points = []
+    #     for i in range(len(self.rhythmList)):
+    #         if i > 0:
+    #             points.append(self.beatLength / float(self.rhythmList[i]))
+    #             points[i] += float(self.rhythmList[i-1])
+    #         else:
+    #             pass
+    #     print(points)
+    #     return points
+        
+    def calculateTimeOfNotes(self, *args):
+        recLength = []
+        for i in range(len(self.rhythmList)):
+            recLength.append((self.beatLength / float(self.rhythmList[i])) * 2)
+        return recLength
+    
+    def calculateRecLength(self) -> float:
+        recLength = self.calculateTimeOfNotes()
+        for i in range(len(recLength)):
+            self.recLength += float(recLength[i])
+        self.recLength += 0.45 # factor in for the delay of starting
+        print(self.recLength)
+
 

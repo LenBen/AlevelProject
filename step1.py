@@ -4,26 +4,24 @@ from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QWidget,
     QLabel,
-    QStatusBar,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
     QMessageBox,
+    QFileDialog,
 )
 from PyQt6.QtGui import(
-    QAction,
     QIcon,
     QFont,
 
 )
 
 from PyQt6.QtCore import (
-    Qt,
     QSize,
+    QUrl,
 )
+
+from PIL import Image
 
 from step2 import step2Window
 
@@ -31,6 +29,7 @@ class step1Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.windowSize = 512
+        self.uploadedImage = False
         self._initialiseUI()
     
     def _initialiseUI(self):
@@ -64,12 +63,27 @@ class step1Window(QWidget):
         self.uploadButton.clicked.connect(self._uploadFile)
     
     def _callNextPage(self):
-        self.window = step2Window()
-        self.window.show()
+        if self.uploadedImage:
+            self.window = step2Window()
+            self.window.show()
+        else:
+            QMessageBox.critical(self, "File needed",
+                                 """<p>To go to the next step, a file must be uploaded</p>
+                                 <p>Please upload a file</p>""",
+                                 QMessageBox.StandardButton.Ok)
     
     def _uploadFile(self):
-        pass
+        rhythmFile = QFileDialog.getOpenFileUrl(self, "Open Rhythm File",
+                                                QUrl("C://"), "Image Files(*.jpg *.jpeg *.png)")
+        
 
+        image = Image.open(QUrl.toLocalFile(rhythmFile[0]))
+        image = image.save("O_Input\\music.png")
+
+        self.uploadedImage = True
+    
+
+        
 def main():
     app = QApplication(sys.argv)
     window = step1Window()

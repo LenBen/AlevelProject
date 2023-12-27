@@ -26,7 +26,6 @@ from PyQt6.QtCore import (
 )
 
 from step1 import step1Window
-from TestGUI2 import MainWindow
 
 class MenuScreen(QWidget):
     def __init__(self) -> None:
