@@ -23,7 +23,7 @@ class getDifference:
         modelArray, b = self.getModelTimes()
         plot.figure(figsize=(10,3))
         plot.ylim(-1,1)
-        # librosa.display.waveshow(y=audio, sr=self.sampleRate)
+        librosa.display.waveshow(y=audio, sr=self.sampleRate)
         plot.vlines(beatTimes, -1, 1, colors="r")
         plot.vlines(modelArray, -1, 1, colors="g")
         print(beatTimes)
@@ -48,7 +48,7 @@ class getDifference:
 
     def compareTimes(self):
         modelArray, beatTimes = self.getModelTimes()
-        if not(len(modelArray) == len(beatTimes)):
+        if len(modelArray) != len(beatTimes):
             raise(RuntimeError)
         value = []
         for i in range(len(modelArray)):
@@ -68,6 +68,7 @@ class getDifference:
         score *= 100
         score /= 4
         self.score = score
+        return value
 
 def main():
 
@@ -80,7 +81,9 @@ def main():
     getDiff.plotGraph()
 
     # getDiff.getModelTimes()
-    # getDiff.compareTimes()
+    getDiff.compareTimes()
+    print(getDiff.score)
+
 
 if __name__ =="__main__":
     main()

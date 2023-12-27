@@ -13,13 +13,17 @@ from PyQt6.QtGui import(
     QFont,
 
 )
+from CreateRhythm import CreateRhythm
+
+cr = CreateRhythm()
+
+cr.GetMusic()           #These two are making up for the lack of the other steps being used ""REMOVE BEFORE FULL TEST""
+cr.calculateBarLength()
 
 from comparison import getDifference
-from CreateRhythm import CreateRhythm
 
 gd = getDifference()
 
-cr = CreateRhythm()
 
 class step4Window(QWidget):
     def __init__(self) -> None:
@@ -70,11 +74,8 @@ class step4Window(QWidget):
         QApplication.closeAllWindows()
     
     def _showFeedback(self):
-        pass
-
+        numBeats = len(cr.rhythmList)
 def main():
-    cr.GetMusic()
-    cr.calculateBarLength()
 
     app = QApplication(sys.argv)
     window = step4Window()
