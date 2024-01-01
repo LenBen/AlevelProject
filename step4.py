@@ -22,13 +22,13 @@ from comparison import getDifference
 
 gd = getDifference()
 
-
 class step4Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.windowSize = 512
         self.checkedBPM = False
         self._initialiseUI()
+        self.i = gd.callFuncs()
     
     def _initialiseUI(self):
         self.setFixedSize(self.windowSize, self.windowSize)
@@ -79,7 +79,9 @@ class step4Window(QWidget):
                                      <p>{values[i]}</p>
                                      <p>Where 1 is the best and on time and 4 is the worst and most off rhythm</p> """)
 
-
+def callClass():
+    global gd
+    gd = getDifference()
 
 def main():
 
