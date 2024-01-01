@@ -17,9 +17,6 @@ from CreateRhythm import CreateRhythm
 
 cr = CreateRhythm()
 
-cr.GetMusic()           #These two are making up for the lack of the other steps being used ""REMOVE BEFORE FULL TEST""
-cr.calculateBarLength()
-
 from comparison import getDifference
 
 gd = getDifference()
@@ -75,6 +72,9 @@ class step4Window(QWidget):
     
     def _showFeedback(self):
         numBeats = len(cr.rhythmList)
+
+
+
 def main():
 
     app = QApplication(sys.argv)

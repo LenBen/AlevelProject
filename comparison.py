@@ -12,6 +12,11 @@ class getDifference:
     def __init__(self) ->  None:
         self.score = 0
         self.sampleRate = audio.getSampleRate()
+        self.callFuncs()
+    
+    def callFuncs(self):
+        cr.GetMusic()
+        cr.calculateBarLength()
     
     def _getAudioArray(self):
         audio, sampleRate = librosa.load("voice.wav")
@@ -23,7 +28,7 @@ class getDifference:
         modelArray, b = self.getModelTimes()
         plot.figure(figsize=(10,3))
         plot.ylim(-1,1)
-        librosa.display.waveshow(y=audio, sr=self.sampleRate)
+        # librosa.display.waveshow(y=audio, sr=self.sampleRate)
         plot.vlines(beatTimes, -1, 1, colors="r")
         plot.vlines(modelArray, -1, 1, colors="g")
         print(beatTimes)
@@ -73,8 +78,8 @@ class getDifference:
 def main():
 
             
-    cr.GetMusic()
-    cr.calculateBarLength()
+    # cr.GetMusic()
+    # cr.calculateBarLength()
     # cr.calculateRecLength()
 
     getDiff = getDifference()
