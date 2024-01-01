@@ -17,6 +17,7 @@ class getDifference:
     def callFuncs(self):
         cr.GetMusic()
         cr.calculateBarLength()
+        self.compareTimes()
     
     def _getAudioArray(self):
         audio, sampleRate = librosa.load("voice.wav")
