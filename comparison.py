@@ -12,12 +12,13 @@ class getDifference:
     def __init__(self) ->  None:
         self.score = 0
         self.sampleRate = audio.getSampleRate()
-        self.callFuncs()
+        # self.callFuncs()
     
     def callFuncs(self):
         cr.GetMusic()
         cr.calculateBarLength()
         self.compareTimes()
+        return None
     
     def _getAudioArray(self):
         audio, sampleRate = librosa.load("voice.wav")

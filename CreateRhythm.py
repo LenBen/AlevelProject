@@ -90,7 +90,7 @@ class CreateRhythm:
     def calculateTimeOfNotes(self, *args):
         recLength = []
         for i in range(len(self.rhythmList)):
-            recLength.append((self.beatLength / float(self.rhythmList[i])) * 2)
+            recLength.append((self.beatLength / float(self.rhythmList[i])) * 4)
         return recLength
     
     def calculateRecLength(self) -> float:
