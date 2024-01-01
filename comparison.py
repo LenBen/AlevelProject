@@ -17,7 +17,7 @@ class getDifference:
     def callFuncs(self):
         cr.GetMusic()
         cr.calculateBarLength()
-        # self.compareTimes()
+        self.compareTimes()
         return None
     
     def _getAudioArray(self):

@@ -27,8 +27,9 @@ class step4Window(QWidget):
         super().__init__()
         self.windowSize = 512
         self.checkedBPM = False
+        gd.callFuncs()
         self._initialiseUI()
-        self.i = gd.callFuncs()
+        
     
     def _initialiseUI(self):
         self.setFixedSize(self.windowSize, self.windowSize)
