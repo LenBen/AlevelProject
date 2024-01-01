@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QPushButton,
+    QMessageBox,
 )
 from PyQt6.QtGui import(
     QIcon,
@@ -16,9 +17,6 @@ from PyQt6.QtGui import(
 from CreateRhythm import CreateRhythm
 
 cr = CreateRhythm()
-
-cr.GetMusic()           #These two are making up for the lack of the other steps being used ""REMOVE BEFORE FULL TEST""
-cr.calculateBarLength()
 
 from comparison import getDifference
 
@@ -74,7 +72,15 @@ class step4Window(QWidget):
         QApplication.closeAllWindows()
     
     def _showFeedback(self):
-        numBeats = len(cr.rhythmList)
+        values = gd.compareTimes()
+        for i in range(len(values)):
+            QMessageBox.information(self, f"Beat {i + 1}",
+                                    f"""<p>Your score on this beat is:</p>
+                                     <p>{values[i]}</p>
+                                     <p>Where 1 is the best and on time and 4 is the worst and most off rhythm</p> """)
+
+
+
 def main():
 
     app = QApplication(sys.argv)
