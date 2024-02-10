@@ -1,28 +1,15 @@
 import sys                      #Importing all of the libraries and classes used in the program
-import typing
 from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QWidget,
     QLabel,
-    QStatusBar,
     QPushButton,
-    QHBoxLayout,
-    QVBoxLayout,
-    QMessageBox,
 )
 from PyQt6.QtGui import(
-    QAction,
     QIcon,
     QFont,
-
-)
-
-from PyQt6.QtCore import (
-    Qt,
-    QSize,
 )
 
 from step1 import step1Window
@@ -69,8 +56,7 @@ class MenuScreen(QWidget):
         self.startButton.clicked.connect(self._callOtherPage)
 
     def _callOtherPage(self):       # Calls the next page of the program
-        self.window = step1Window()
-        # self.window = MainWindow()
+        self.window = step1Window() 
         self.window.show()
 
 def main():     # Function if the file is run by itself

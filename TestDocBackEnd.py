@@ -60,5 +60,5 @@ class Audio:
     def getRecordTime(self) -> int: # getter of record_audio
         return self.record_audio
     
-    def getSampleRate(self) -> int: # getter of sample rate
+    def getSampleRate(self) -> int:
         return self.rate

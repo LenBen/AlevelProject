@@ -22,7 +22,7 @@ class CreateRhythm:
         self.callOrchestra()
         with open("O_Output/music.txt", "r") as notes:
             w = notes.read()
-            if w[3] == "\\":
+            if w[2] == "\\":
                 w = self._getTimeSig(w)
             letter = False
             for i in w:
@@ -42,6 +42,8 @@ class CreateRhythm:
                     tempArray.append(temp)
                     temp = ""
             tempArray.reverse()
+            for i in range(len(tempArray)):
+                tempArray[i] = tempArray[i][::-1]
             self.rhythmList = tempArray
         # self.createLengthArray()
     
