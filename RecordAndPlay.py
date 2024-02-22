@@ -3,7 +3,7 @@ import wave
 import vlc
 
 class Audio:
-    def __init__(self):
+    def __init__(self) -> None:
         self.chunk = 512
         self.format = pyaudio.paInt16
         self.channels = 1
@@ -11,7 +11,7 @@ class Audio:
         self.record_time = 5
         self.output_filename = "voice.wav"
     
-    def record(self, *args): # records for specified time
+    def record(self, *args) -> None: # records for specified time
      
      p = pyaudio.PyAudio()
      stream = p.open(rate=self.rate,

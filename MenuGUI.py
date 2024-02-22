@@ -17,22 +17,22 @@ from step1 import step1Window
 class MenuScreen(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.windowSize = 512
-        self.displaySize = 40
+        self.windowSize : int = 512
+        self.displaySize : int = 40
         self._initialiseUI()
 
-    def _initialiseUI(self):        # Initialise the size, title and icon of the window.
+    def _initialiseUI(self) -> None:        # Initialise the size, title and icon of the window.
         self.setFixedSize(self.windowSize, self.windowSize)
         self.setWindowTitle("The Rhythm Checker")
         self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
     
-    def _setUpMainWindow(self):     # Calls methods to set up the components of the window
+    def _setUpMainWindow(self) -> None:     # Calls methods to set up the components of the window
         self._createLabels()
         self._createButton()
     
-    def _createLabels(self):        # Creates all the text labels in the program
+    def _createLabels(self) -> None:        # Creates all the text labels in the program
         title_label = QLabel(self)
         title_label.setText("The Rhythm Checker")
         title_label.setFont(QFont("Arial", 35))
@@ -48,14 +48,14 @@ class MenuScreen(QWidget):
         dec2_label.setFont(QFont("Arial",8))
         dec2_label.move(self.windowSize//4,115)
 
-    def _createButton(self):        # Creates the button of the window
+    def _createButton(self) -> None:        # Creates the button of the window
         self.startButton = QPushButton("Start the rhythm checker!",self)
         self.startButton.setFixedSize(400, 200)
         self.startButton.setFont(QFont("Arial", 20))
         self.startButton.move(self.windowSize//8,self.windowSize//3)
         self.startButton.clicked.connect(self._callOtherPage)
 
-    def _callOtherPage(self):       # Calls the next page of the program
+    def _callOtherPage(self) -> None:       # Calls the next page of the program
         self.window = step1Window() 
         self.window.show()
 

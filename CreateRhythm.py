@@ -13,11 +13,10 @@ class CreateRhythm:
         return self.bpm
 
     def setBPM(self, BPM : int) -> None: # setter for BPM
-        try:
-            if BPM > 0 and BPM < 280:
-                self.bpm = int(BPM)
-        except:
-            print("Invalid")
+        if BPM > 0 and BPM < 280:
+            self.bpm = int(BPM)
+        else:
+            raise TypeError
         
     def callOrchestra(*args) -> None: # Calls the orchestra library
         try:
