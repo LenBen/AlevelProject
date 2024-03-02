@@ -1,43 +1,34 @@
-import sys
-import typing
-from PyQt6 import QtCore
+import sys                      #Importing all of the libraries and classes used in the program
 
 from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
     QLabel,
     QPushButton,
-    QMessageBox,
+    QMessageBox
 )
 from PyQt6.QtGui import(
     QIcon,
     QFont,
-
 )
-from CreateRhythm import CreateRhythm
-
-cr = CreateRhythm()
 
 from comparison import getDifference
 
 gd = getDifference()
 
-class step4Window(QWidget):
+class Step4Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.windowSize = 512
-        self.checkedBPM = False
-        gd.callFuncs()
         self._initialiseUI()
-        
-    
-    def _initialiseUI(self):
+
+    def _initialiseUI(self) -> None:        # Initialise the size, title and icon of the window.
         self.setFixedSize(self.windowSize, self.windowSize)
-        self.setWindowTitle("The Rhythm Checker")
+        self.setWindowTitle("The Rhythm Checker 4")
         self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
-
+    
     def _setUpMainWindow(self):
         self._createLabels()
         self._createButtons()
@@ -49,7 +40,7 @@ class step4Window(QWidget):
         titleLabel.move(self.windowSize//3, 30)
 
         scoreLabel = QLabel(self)
-        scoreLabel.setText(f"Your score is: {gd.score}%")
+        scoreLabel.setText(f"Your score is: {gd.score} % !")
         scoreLabel.setFont(QFont("Arial", 28))
         scoreLabel.move(self.windowSize//5, 80)
 
@@ -71,25 +62,23 @@ class step4Window(QWidget):
     
     def _finishRhythmChecker(self):
         QApplication.closeAllWindows()
-    
+   
     def _showFeedback(self):
-        values = gd.compareTimes()
-        for i in range(len(values)):
+        for i in range(len(gd.scoreValues)):
             QMessageBox.information(self, f"Beat {i + 1}",
                                     f"""<p>Your score on this beat is:</p>
-                                     <p>{values[i]}</p>
+                                     <p>{gd.scoreValues[i]}</p>
                                      <p>Where 1 is the best and on time and 4 is the worst and most off rhythm</p> """)
 
-def callClass():
-    global gd
-    gd = getDifference()
+    def _runClass(*args):
+        gd.getModelTimes()
+        gd.compareTimes()
+        
 
-def main():
-
+def main():     # Function if the file is run by itself
     app = QApplication(sys.argv)
-    window = step4Window()
+    window = Step4Window()
     sys.exit(app.exec())
 
-if __name__ == "__main__":
+if __name__ =="__main__":
     main()
-

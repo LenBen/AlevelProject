@@ -1,6 +1,4 @@
 import sys                  # Import all the libraries and classes for the program
-import typing
-from PyQt6 import QtCore
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -8,7 +6,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
     QMessageBox,
-    QFileDialog,
+    QLineEdit,
 )
 from PyQt6.QtGui import(
     QIcon,
@@ -18,77 +16,123 @@ from PyQt6.QtGui import(
 
 from PyQt6.QtCore import (
     QSize,
-    QUrl,
 )
 
-from PIL import Image
+from RecordAndPlay import Audio
 
-from TestDocPyQt import Step2Window as step2Window
+from TestDocPyQt import Step4Window
 
-class step1Window(QWidget):
+audio = Audio()
+
+
+class step3Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.windowSize = 512
-        self.uploadedImage = False
+        self.windowSize : int = 512
+        self.recorded : bool = False
+        self.checkedRecLength : bool = False
         self._initialiseUI()
     
-    def _initialiseUI(self):        # Initialise the size, title and icon of the window.
+    def _initialiseUI(self) -> None:        # Initialise the size, title and icon of the window.
         self.setFixedSize(self.windowSize, self.windowSize)
-        self.setWindowTitle("The Rhythm Checker")
+        self.setWindowTitle("The Rhythm Checker 3")
         self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
     
-    def _setUpMainWindow(self):     # Calls methods to set up the components of the window
+    def _setUpMainWindow(self):
         self._createLabels()
         self._createButtons()
-    
-    def _createLabels(self):        # Creates all the text labels in the program
-        title_label = QLabel(self)
-        title_label.setText("Step 1")
-        title_label.setFont(QFont("Arial", 35))
-        title_label.move(self.windowSize//3,30)
-    
-    def _createButtons(self):       # Creates the button of the window
+        self._createLineEdit()
+
+    def _createLabels(self):
+        titleLabel = QLabel(self)
+        titleLabel.setText("Step 3")
+        titleLabel.setFont(QFont("Arial", 35))
+        titleLabel.move(self.windowSize//3, 30)
+
+        self.timeLabel = QLabel(self)
+        self.timeLabel.setText(f"Recording Length: {audio.getRecordTime()} s")
+        self.timeLabel.move(20, 415)
+
+    def _createButtons(self):
         self.nextButton = QPushButton("Next", self)
         self.nextButton.setFixedSize(100,50)
         self.nextButton.move(400,450)
         self.nextButton.clicked.connect(self._callNextPage)
 
-        self.uploadButton = QPushButton("",self)
-        self.uploadButton.setIcon(QIcon("Images\\upload.png"))
-        self.uploadButton.setIconSize(QSize(400,250))
-        self.uploadButton.setFixedSize(400,250)
-        self.uploadButton.move(self.windowSize//8, self.windowSize//4)
-        self.uploadButton.clicked.connect(self._uploadFile)
-    
-    def _callNextPage(self):        # Calls the next class if an image has been uploaded
-        if self.uploadedImage:
-            self.window = step2Window()
-            self.window.show()
-        else:
-            QMessageBox.critical(self, "File needed",
-                                 """<p>To go to the next step, a file must be uploaded</p>
-                                 <p>Please upload a file</p>""",
-                                 QMessageBox.StandardButton.Ok)
-    
-    def _uploadFile(self):      # Uploads the file
-        rhythmFile = QFileDialog.getOpenFileUrl(self, "Open Rhythm File",       # Opens the file via the path of the file
-                                                QUrl("C://"), "Image Files(*.jpg *.jpeg *.png)")
-        
-        try:
-            image = Image.open(QUrl.toLocalFile(rhythmFile[0]))
-            image = image.save("O_Input\\music.png")        # Saves the file 
-        except Exception as e:
-            print(e)
+        self.recordButton = QPushButton(self)
+        self.recordButton.setIcon(QIcon("Images\\record.png"))
+        self.recordButton.setIconSize(QSize(400,250))
+        self.recordButton.setFixedSize(400,250)
+        self.recordButton.move(self.windowSize//8, self.windowSize//4)
+        self.recordButton.clicked.connect(self._record)
 
-        self.uploadedImage = True
+        self.submitButton = QPushButton("SUBMIT",self)
+        self.submitButton.setFixedSize(80,30)
+        self.submitButton.move(275, 435)
+        self.submitButton.setDisabled(True)
+        self.submitButton.clicked.connect(self._setTime)
     
+    def _createLineEdit(self):
+        self.timeEdit = QLineEdit(self)
+        self.timeEdit.resize(250,30)
+        self.timeEdit.move(20,435)
+        self.timeEdit.textChanged.connect(self._checkIfNotEmpty)
+    
+    def _checkIfNotEmpty(self, text) -> None:
+        if text:
+            self.submitButton.setDisabled(False)
+        elif not text:
+            self.submitButton.setDisabled(True)
+        else:
+            print("Error")
+    
+    def _record(self) -> None:
+        audio.record()
+        self.recorded = True
+    
+    def _setTime(self) -> None:
+        try:
+            if self.checkedRecLength:
+                time = int(self.timeEdit.text(), 0)
+                value = audio.setRecordTime(time)
+                if value: 
+                    QMessageBox.information(self,"Accepted",
+                                        f"""<p>Value accepted</p>
+                                         <p>Time changed to {audio.getRecordTime()}s</p> """,
+                                        QMessageBox.StandardButton.Ok)
+                    self.timeLabel.setText(f"Recording Length: {audio.getRecordTime()} s")
+                else:
+                    QMessageBox.critical(self,"Not Accepted",
+                                     """<p>The value given is out of range</p> """,
+                                     QMessageBox.StandardButton.Ok)
+            else:
+                QMessageBox.question(self,"Are you sure?",
+                                     f"""<p>The recording length is automatically set according to the information given</p>
+                                     <p>The current recording length is {audio.getRecordTime()}s</p>
+                                     <p>Changing the lenght of the recording may have an effect on the rhythm comparison</p>
+                                      <p>If you are sure you want to change the value submit again</p> """,
+                                      QMessageBox.StandardButton.Yes)
+                self.checkedRecLength = True
+        except:
+            QMessageBox.critical(self,"Not Accepted",
+                                     """<p>The value given is not accepted</p> """,
+                                     QMessageBox.StandardButton.Ok)
+
+    def _callNextPage(self) -> None:
+        if self.recorded:
+            self.step4 = Step4Window()
+            self.step4.show()
+        else:
+            QMessageBox.critical(self,"Not Recording",
+                                     """<p>The rhythm checker can't check when there is no recording!</p> """,
+                                     QMessageBox.StandardButton.Ok)
 
         
 def main():         # Function if the file is run by itself
     app = QApplication(sys.argv)
-    window = step1Window()
+    window = step3Window()
     sys.exit(app.exec())
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import subprocess as sp
+import step2
 class CreateRhythm:
     def __init__(self) -> None:
         self.rhythmArray : list = []
@@ -17,6 +18,9 @@ class CreateRhythm:
             self.bpm = int(BPM)
         else:
             raise TypeError
+    
+    def getLengthArray(self) -> list:
+        return self.lengthArray
         
     def callOrchestra(*args) -> None: # Calls the orchestra library
         try:
@@ -115,3 +119,4 @@ class CreateRhythm:
         for i in range(len(self.lengthArray)):
             self.recLength += float(self.lengthArray[i])
         self.recLength += 1.45 # factor in for the delay of starting
+        step2.audio.setRecordTime(self.recLength)

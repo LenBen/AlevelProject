@@ -2,13 +2,15 @@ import pyaudio
 import wave
 import vlc
 
+
+
 class Audio:
     def __init__(self) -> None:
         self.chunk = 512
         self.format = pyaudio.paInt16
         self.channels = 1
-        self.rate = 44100
-        self.record_time = 5
+        self.rate : int = 44100
+        self.record_time : float = 5
         self.output_filename = "voice.wav"
     
     def record(self, *args) -> None: # records for specified time
@@ -52,13 +54,13 @@ class Audio:
             return False
 
         if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
-            self.record_audio = record_time
+            self.record_time = record_time
             return True 
         else:
             return False
    
     def getRecordTime(self) -> int: # getter of record_audio
-        return self.record_audio
+        return self.record_time
     
     def getSampleRate(self) -> int: # getter of sample rate
         return self.rate

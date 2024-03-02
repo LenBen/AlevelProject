@@ -1,96 +1,75 @@
 import librosa, librosa.display
 import matplotlib.pyplot as plot
-import numpy as np
+import numpy
 
 from RecordAndPlay import Audio
-from CreateRhythm import CreateRhythm
+import step2
 
 audio = Audio()
-cr = CreateRhythm()
 
 class getDifference:
     def __init__(self) ->  None:
-        self.score = 0
-        self.sampleRate = audio.getSampleRate()
-        # self.callFuncs()
+        self.score : int = 0
+        self.sampleRate : int = audio.getSampleRate()
+        self.audioArray : any = []
+        self.modelArray : list = []
+        self.scoreValues : list = []
     
-    def callFuncs(self):
-        cr.GetMusic()
-        cr.calculateBarLength()
-        self.compareTimes()
-        return None
-    
-    def _getAudioArray(self):
-        audio, sampleRate = librosa.load("voice.wav")
-        beatTimes = librosa.onset.onset_detect(y=audio, sr=self.sampleRate, units="time")
-        return audio, beatTimes
+    def _getAudioArray(self) -> None: # gets the Audio array
+        audio, sr  = librosa.load("voice.wav")
+        self.audioArray = librosa.onset.onset_detect(y=audio, sr=self.sampleRate, units="time") # Uses librosa to detect the beats of the audio file
+        self.audioArray = numpy.array(self.audioArray)
+        self.audioArray = self.audioArray.tolist()
+        # self._cleanUpAudioArray()
 
-    def plotGraph(self):
-        audio, beatTimes = self._getAudioArray()
-        modelArray, b = self.getModelTimes()
+    def _cleanUpAudioArray(self) -> None: # Gets rid of beats within 0.1s
+        for i in range(len(self.audioArray)):
+            if self.audioArray[i] <= 0.1:
+                self.audioArray = list(self.audioArray) # python didn't want to allow the remove function
+                self.audioArray.remove(self.audioArray[i])
+
+    def getModelTimes(self) -> None:
+ 
+        self._getAudioArray()
+        lengthArray = step2.cr.getLengthArray()
+        self.modelArray.append(self.audioArray[0]) # This alligns the model times and the audio array
+        
+        for i in range(len(lengthArray)): # This creates the model array
+            if i == 0:
+                pass # Skips the fist time, due to the earlier synchronisation
+            else:
+                self.modelArray.append(self.modelArray[i-1] + lengthArray[i-1]) # Adds time to beat before
+        print(self.modelArray)
+
+    def plotGraph(self) -> None: # Plots the graph
         plot.figure(figsize=(10,3))
         plot.ylim(-1,1)
-        # librosa.display.waveshow(y=audio, sr=self.sampleRate)
-        plot.vlines(beatTimes, -1, 1, colors="r")
-        plot.vlines(modelArray, -1, 1, colors="g")
-        print(beatTimes)
-        plot.show()
-    
+        plot.vlines(self.audioArray, -1, 1, colors="r") # user times in red
+        plot.vlines(self.modelArray, -1, 1, colors="g") # model times in green
+        plot.show()  
 
-    def getModelTimes(self):
-        audio, beatTimes = self._getAudioArray()
-        lengths = cr.calculateTimeOfNotes()
-        modelArray = []
-        modelArray.append(beatTimes[0]) # This gets rid of any error with the break at the beggining of the recording
-        for i in range(len(lengths)):
-            if i == 1:
-                pass
-            else:
-                modelArray.append(modelArray[i - 1] + lengths[i])
-        beatTimes = beatTimes.tolist()
-        print("Lists")
-        print(modelArray)
-        print(beatTimes)
-        return modelArray, beatTimes
+    def compareTimes(self) -> None:
+        if self.modelArray == []: # Checks to make sure that the model array exists
+            self.getModelTimes()
 
-    def compareTimes(self):
-        modelArray, beatTimes = self.getModelTimes()
-        if len(modelArray) != len(beatTimes):
-            raise(RuntimeError)
-        value = []
-        for i in range(len(modelArray)):
-            if(beatTimes[i] <= modelArray[i] + 0.055) and (beatTimes[i] >= modelArray[i] - 0.055):
-                value.append(1)
-            elif(beatTimes[i] <= modelArray[i] + 0.085) and (beatTimes[i] >= modelArray[i] - 0.085):
-                value.append(2)
-            elif(beatTimes[i] <= modelArray[i] + 0.115) and (beatTimes[i] >= modelArray[i] - 0.115):
-                value.append(3)
-            elif(beatTimes[i] <= modelArray[i] + 0.145) and (beatTimes[i] >= modelArray[i] - 0.145):
-                value.append(4)
-            else:
-                value.append(5)
-        score = 0
-        for i in range(len(value)):
-            score += 1 / value[i]
-        score *= 100
-        score /= 4
-        self.score = score
-        return value
+        if not( len(self.modelArray) == len(self.audioArray) ): # Checks that the lists are the same length
+            self.score = -1
+            return None
+        
+        for i in range(len(self.modelArray)): # compares the times and gives then a score.
+            match (True):
+                case _ if (self.audioArray[i] <= self.modelArray[i] + 0.055) and (self.audioArray[i] >= self.modelArray[i] - 0.055):
+                    self.scoreValues.append(1)
+                case _ if (self.audioArray[i] <= self.modelArray[i] + 0.055) and (self.audioArray[i] >= self.modelArray[i] - 0.055):
+                    self.scoreValues.append(2)
+                case _ if (self.audioArray[i] <= self.modelArray[i] + 0.055) and (self.audioArray[i] >= self.modelArray[i] - 0.055):
+                    self.scoreValues.append(3)
+                case _ if (self.audioArray[i] <= self.modelArray[i] + 0.055) and (self.audioArray[i] >= self.modelArray[i] - 0.055):
+                    self.scoreValues.append(4)
+                case _:
+                    self.scoreValues.append(5)
 
-def main():
+        for i in range(len(self.scoreValues)): # calculates percentage score
+            self.score += 1 / self.scoreValues[i]
+        self.score = (self.score * 100) / len(self.scoreValues)
 
-            
-    # cr.GetMusic()
-    # cr.calculateBarLength()
-    # cr.calculateRecLength()
-
-    getDiff = getDifference()
-    getDiff.plotGraph()
-
-    # getDiff.getModelTimes()
-    getDiff.compareTimes()
-    print(getDiff.score)
-
-
-if __name__ =="__main__":
-    main()

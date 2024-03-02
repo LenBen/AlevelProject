@@ -23,7 +23,7 @@ from PyQt6.QtCore import (
 
 from PIL import Image
 
-from step2 import step2Window
+from step2 import Step2Window
 
 class step1Window(QWidget):
     def __init__(self) -> None:
@@ -64,7 +64,7 @@ class step1Window(QWidget):
     
     def _callNextPage(self):        # Calls the next class if an image has been uploaded
         if self.uploadedImage:
-            self.window = step2Window()
+            self.window = Step2Window()
             self.window.show()
         else:
             QMessageBox.critical(self, "File needed",

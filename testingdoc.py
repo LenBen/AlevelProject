@@ -1,7 +1,8 @@
-from CreateRhythm import CreateRhythm
+scoreValues = ["D","F","E"]
+score = 0
 
-cr = CreateRhythm()
-cr.GetMusic()
-cr.calculateBarLength()
-cr.calculateRecLength()
+for i in range(len(scoreValues)): # calculates percentage score
+    score += 1 / scoreValues[i]
+score = (score * 100) / len(scoreValues)
 
+print(score)

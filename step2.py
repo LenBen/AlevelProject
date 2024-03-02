@@ -16,7 +16,7 @@ from PyQt6.QtGui import(
 from CreateRhythm import CreateRhythm
 from RecordAndPlay import Audio
 
-from TestDocPyQt2 import step3Window
+from step3 import step3Window
 
 cr = CreateRhythm()
 audio = Audio()
@@ -119,9 +119,10 @@ class Step2Window(QWidget):
             cr.calculateBeatLength()
             print("2")
             cr.calculateRecLength()
-            print("3")
+            print()
             audio.setRecordTime(cr.recLength)
             print("4")
+            print(audio.record_time)
             return True
         except:
             print("error") 
