@@ -1,6 +1,4 @@
-import sys
-import typing
-from PyQt6 import QtCore
+import sys                  # Import all the libraries and classes for the program
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -8,11 +6,11 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
     QMessageBox,
-    QLineEdit
+    QLineEdit,
 )
 from PyQt6.QtGui import(
     QIcon,
-    QFont
+    QFont,
 
 )
 
@@ -20,43 +18,43 @@ from PyQt6.QtCore import (
     QSize,
 )
 
-from step4 import Step4Window
-from comparison import getDifference
-import step2
+from RecordAndPlay import Audio
 
-gd = getDifference()
+from TestDocPyQt import Step4Window
+
+audio = Audio()
+
 
 class step3Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.windowSize = 512
-        self.checkedRecLength = False
-        self.recorded = False
+        self.windowSize : int = 512
+        self.recorded : bool = False
+        self.checkedRecLength : bool = False
         self._initialiseUI()
     
-    def _initialiseUI(self):
+    def _initialiseUI(self) -> None:        # Initialise the size, title and icon of the window.
         self.setFixedSize(self.windowSize, self.windowSize)
-        self.setWindowTitle("The Rhythm Checker")
+        self.setWindowTitle("The Rhythm Checker 3")
         self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
-
+    
     def _setUpMainWindow(self):
         self._createLabels()
         self._createButtons()
         self._createLineEdit()
-    
+
     def _createLabels(self):
         titleLabel = QLabel(self)
         titleLabel.setText("Step 3")
         titleLabel.setFont(QFont("Arial", 35))
         titleLabel.move(self.windowSize//3, 30)
 
-        timeLabel = QLabel(self)
-        timeLabel.setText(f"Recording Length: {step2.audio.getRecordTime()}")
-        print(step2.audio.getRecordTime())
-        timeLabel.move(20, 415)
-    
+        self.timeLabel = QLabel(self)
+        self.timeLabel.setText(f"Recording Length: {audio.getRecordTime()} s")
+        self.timeLabel.move(20, 415)
+
     def _createButtons(self):
         self.nextButton = QPushButton("Next", self)
         self.nextButton.setFixedSize(100,50)
@@ -82,7 +80,7 @@ class step3Window(QWidget):
         self.timeEdit.move(20,435)
         self.timeEdit.textChanged.connect(self._checkIfNotEmpty)
     
-    def _checkIfNotEmpty(self, text):
+    def _checkIfNotEmpty(self, text) -> None:
         if text:
             self.submitButton.setDisabled(False)
         elif not text:
@@ -90,20 +88,21 @@ class step3Window(QWidget):
         else:
             print("Error")
     
-    def _record(self):
-        step2.audio.record()
+    def _record(self) -> None:
+        audio.record()
         self.recorded = True
-
-    def _setTime(self):
+    
+    def _setTime(self) -> None:
         try:
             if self.checkedRecLength:
-                time = float(self.timeEdit.text())
-                value = step2.audio.setRecordTime(time)
+                time = int(self.timeEdit.text(), 0)
+                value = audio.setRecordTime(time)
                 if value: 
                     QMessageBox.information(self,"Accepted",
                                         f"""<p>Value accepted</p>
-                                         <p>Time changed to {step2.audio.getRecordTime()}s</p> """,
+                                         <p>Time changed to {audio.getRecordTime()}s</p> """,
                                         QMessageBox.StandardButton.Ok)
+                    self.timeLabel.setText(f"Recording Length: {audio.getRecordTime()} s")
                 else:
                     QMessageBox.critical(self,"Not Accepted",
                                      """<p>The value given is out of range</p> """,
@@ -111,7 +110,7 @@ class step3Window(QWidget):
             else:
                 QMessageBox.question(self,"Are you sure?",
                                      f"""<p>The recording length is automatically set according to the information given</p>
-                                     <p>The current recording length is {step2.audio.getRecordTime()}s</p>
+                                     <p>The current recording length is {audio.getRecordTime()}s</p>
                                      <p>Changing the lenght of the recording may have an effect on the rhythm comparison</p>
                                       <p>If you are sure you want to change the value submit again</p> """,
                                       QMessageBox.StandardButton.Yes)
@@ -121,26 +120,17 @@ class step3Window(QWidget):
                                      """<p>The value given is not accepted</p> """,
                                      QMessageBox.StandardButton.Ok)
 
-    def _callNextPage(self):
+    def _callNextPage(self) -> None:
         if self.recorded:
-            try:
-                self._callFuncs()
-                self.step4 = Step4Window()
-                self.step4.show()
-            except Exception as e:
-                print(e)
+            self.step4 = Step4Window()
+            self.step4.show()
         else:
             QMessageBox.critical(self,"Not Recording",
                                      """<p>The rhythm checker can't check when there is no recording!</p> """,
                                      QMessageBox.StandardButton.Ok)
 
-    def _callFuncs(*args):
-        gd.getModelTimes()
-        gd.compareTimes()
-        print(gd.modelArray)
-        print(gd.audioArray)
-
-def main():
+        
+def main():         # Function if the file is run by itself
     app = QApplication(sys.argv)
     window = step3Window()
     sys.exit(app.exec())

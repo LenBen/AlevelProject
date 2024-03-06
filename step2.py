@@ -1,19 +1,16 @@
-import sys
-import typing
-from PyQt6 import QtCore
+import sys                      #Importing all of the libraries and classes used in the program
 
 from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
     QLabel,
     QPushButton,
-    QMessageBox,
-    QLineEdit
+    QLineEdit,
+    QMessageBox
 )
 from PyQt6.QtGui import(
     QIcon,
     QFont,
-
 )
 
 from CreateRhythm import CreateRhythm
@@ -21,24 +18,24 @@ from RecordAndPlay import Audio
 
 from step3 import step3Window
 
-
-createRhythm = CreateRhythm()
+cr = CreateRhythm()
 audio = Audio()
 
-class step2Window(QWidget):
+
+class Step2Window(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.windowSize = 512
         self.checkedBPM = False
         self._initialiseUI()
-    
-    def _initialiseUI(self):
+
+    def _initialiseUI(self) -> None:        # Initialise the size, title and icon of the window.
         self.setFixedSize(self.windowSize, self.windowSize)
-        self.setWindowTitle("The Rhythm Checker")
+        self.setWindowTitle("The Rhythm Checker 2")
         self.setWindowIcon(QIcon("Images\\appLogo.png"))
         self._setUpMainWindow()
         self.show()
-
+    
     def _setUpMainWindow(self):
         self._createLabels()
         self._createButtons()
@@ -56,7 +53,7 @@ class step2Window(QWidget):
         bpmLabel.move(60,160)
 
         self.bpmText = QLabel(self)
-        self.bpmText.setText(f"The current BPM is: {createRhythm.getBPM()}")
+        self.bpmText.setText(f"The current BPM is: {cr.getBPM()}")
         self.bpmText.move(60, 230)
     
     def _createButtons(self):
@@ -77,6 +74,28 @@ class step2Window(QWidget):
         self.bpm_Edit.move(60,200)
         self.bpm_Edit.textChanged.connect(self._checkIfNotEmpty)
     
+    def _checkIfNotEmpty(self, text):
+        if text:
+            self.submitButton.setDisabled(False)
+        elif not text:
+            self.submitButton.setDisabled(True)
+        else:
+            print("Error")
+    
+    def _setbpm(self) -> None:
+        try:
+            cr.setBPM(int(self.bpm_Edit.text(), 0))
+            self.bpmText.setText(f"The current BPM is: {cr.getBPM()}")
+            self.checkedBPM = True
+            QMessageBox.information(self, "bpm set to...",f"bpm set to {cr.bpm}",QMessageBox.StandardButton.Ok)
+        except:
+            QMessageBox.critical(self,
+                                      "Character Error",
+                                      """<p>The characters inputted are invalid</p>
+                                      <p>Please only input numbers</p>""",
+    
+                                      QMessageBox.StandardButton.Ok)
+
     def _callNextPage(self):
         if self.checkedBPM:
             working = self.callFuncs()
@@ -92,49 +111,31 @@ class step2Window(QWidget):
                                     <p>Click the next button again if you are happy with 120 BPM</p>
                                     <p>Otherwise, submit your own</p>""",QMessageBox.StandardButton.Ok)
             self.checkedBPM = True
-
-    def _checkIfNotEmpty(self, text):
-        if text:
-            self.submitButton.setDisabled(False)
-        elif not text:
-            self.submitButton.setDisabled(True)
-        else:
-            print("Error")
-
-    def _setbpm(self):
-        try:
-            t = createRhythm.setBPM(int(self.bpm_Edit.text()))
-            self.bpmText.setText(f"The current BPM is: {createRhythm.getBPM()}")
-            self.checkedBPM = True
-            QMessageBox.information(self, "bpm set to...",f"bpm set to {createRhythm.bpm}",QMessageBox.StandardButton.Ok)
-        except:
-            QMessageBox.critical(self,
-                                      "Character Error",
-                                      """<p>The characters inputted are invalid</p>
-                                      <p>Please only input numbers</p>""",
-                                      QMessageBox.StandardButton.Ok)
     
-    def callFuncs(*args):
+    def callFuncs(*args) -> bool:
         try:
-            createRhythm.GetMusic()
+            cr.GetMusic()
             print("1")
-            createRhythm.calculateBarLength()
+            cr.calculateBeatLength()
             print("2")
-            createRhythm.calculateRecLength()
-            print("3")
-            audio.setRecordTime(createRhythm.recLength)
+            cr.calculateRecLength()
+            print()
+            audio.setRecordTime(cr.recLength)
             print("4")
+            print(audio.record_time)
             return True
         except:
             print("error") 
+            return False
+
+
 
     
 
-
-def main():
+def main():     # Function if the file is run by itself
     app = QApplication(sys.argv)
-    window = step2Window()
+    window = Step2Window()
     sys.exit(app.exec())
 
-if __name__ == "__main__":
+if __name__ =="__main__":
     main()

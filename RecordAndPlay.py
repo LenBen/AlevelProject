@@ -2,65 +2,31 @@ import pyaudio
 import wave
 import vlc
 
-CHUNK = 512
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-record_audio = 5
-WAVE_OUTPUT_FILENAME = "voice.wav"
+
 
 class Audio:
-   def __init__(self) -> None:
-       pass
-   
-   def setRecordTime(self, record_time: float) -> bool: # setter of record_audio
-      global record_audio
-      # nums = []
-      # rec_time = ""
-
-      # record_time = str(record_time)
-
-      # for n in range(len(record_time)): # turn the input into an array
-      #    nums.append(record_time[n])
-
-      # for n in range(len(nums)): # ensure the contents of the array are valid
-      #    if (ord(nums[n]) <= 48 or ord(nums[n]) >= 57):
-      #       return False
-      
-      # for i in range(len(nums)): # turn the array back into a string
-      #    rec_time += str(nums[i])
-      
-      # record_time = int(rec_time) # turn the string into an integer
-         
-      record_time = float(record_time)
-
-      if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
-         record_audio = record_time
-         return True 
-      else:
-         return False
-   
-   def getRecordTime(*args) -> int: # getter of record_audio
-      global record_audio
-      return record_audio
-   
-   def getSampleRate(*args) -> int:
-      return RATE
-
-   def record(*args, **kwargs): # records for specified time
+    def __init__(self) -> None:
+        self.chunk = 512
+        self.format = pyaudio.paInt16
+        self.channels = 1
+        self.rate : int = 44100
+        self.record_time : float = 5
+        self.output_filename = "voice.wav"
+    
+    def record(self, *args) -> None: # records for specified time
      
      p = pyaudio.PyAudio()
-     stream = p.open(rate=RATE,
-                format=FORMAT,
-                channels=CHANNELS,
+     stream = p.open(rate=self.rate,
+                format=self.format,
+                channels=self.channels,
                 input=True,
-                frames_per_buffer=CHUNK)
+                frames_per_buffer=self.chunk)
      frames = []
 
      print("recording start **")
 
-     for i in range(0, int(RATE / CHUNK * record_audio)):
-        data = stream.read(CHUNK)
+     for i in range(0, int(self.rate / self.chunk * self.record_time)):
+        data = stream.read(self.chunk)
         frames.append(data)
 
      print("** recording ended")
@@ -69,14 +35,32 @@ class Audio:
      stream.close()
      p.terminate()
 
-     wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-     wf.setnchannels(CHANNELS)
-     wf.setsampwidth(p.get_sample_size(FORMAT))
-     wf.setframerate(RATE)
+     wf = wave.open(self.output_filename, 'wb')
+     wf.setnchannels(self.channels)
+     wf.setsampwidth(p.get_sample_size(self.format))
+     wf.setframerate(self.rate)
      wf.writeframes(b''.join(frames))
      wf.close()
-
-
-   def PlayMusic(*args, **kwargs): # plays back the recording
+    
+    def PlayMusic(*args): # plays back the recording
         wav = vlc.MediaPlayer("voice.wav")
         wav.play()
+    
+    def setRecordTime(self, record_time: float) -> bool: # setter of record_audio
+
+        try:   
+            record_time = float(record_time)
+        except:
+            return False
+
+        if record_time >= 0 and record_time <=60: # ensure the length of the string isn't negative or over 60s
+            self.record_time = record_time
+            return True 
+        else:
+            return False
+   
+    def getRecordTime(self) -> int: # getter of record_audio
+        return self.record_time
+    
+    def getSampleRate(self) -> int: # getter of sample rate
+        return self.rate

@@ -3,9 +3,10 @@ import matplotlib.pyplot as plot
 import numpy
 
 from RecordAndPlay import Audio
-import step2
+from CreateRhythm import CreateRhythm
 
 audio = Audio()
+cr = CreateRhythm()
 
 class getDifference:
     def __init__(self) ->  None:
@@ -20,7 +21,7 @@ class getDifference:
         self.audioArray = librosa.onset.onset_detect(y=audio, sr=self.sampleRate, units="time") # Uses librosa to detect the beats of the audio file
         self.audioArray = numpy.array(self.audioArray)
         self.audioArray = self.audioArray.tolist()
-        # self._cleanUpAudioArray()
+        self._cleanUpAudioArray()
 
     def _cleanUpAudioArray(self) -> None: # Gets rid of beats within 0.1s
         for i in range(len(self.audioArray)):
@@ -29,9 +30,9 @@ class getDifference:
                 self.audioArray.remove(self.audioArray[i])
 
     def getModelTimes(self) -> None:
- 
+
         self._getAudioArray()
-        lengthArray = step2.cr.getLengthArray()
+        lengthArray = cr.getLengthArray()
         self.modelArray.append(self.audioArray[0]) # This alligns the model times and the audio array
         
         for i in range(len(lengthArray)): # This creates the model array
@@ -39,7 +40,6 @@ class getDifference:
                 pass # Skips the fist time, due to the earlier synchronisation
             else:
                 self.modelArray.append(self.modelArray[i-1] + lengthArray[i-1]) # Adds time to beat before
-        print(self.modelArray)
 
     def plotGraph(self) -> None: # Plots the graph
         plot.figure(figsize=(10,3))
@@ -73,3 +73,25 @@ class getDifference:
             self.score += 1 / self.scoreValues[i]
         self.score = (self.score * 100) / len(self.scoreValues)
 
+
+def main():
+    cr.GetMusic()
+    cr.calculateBeatLength()
+    cr.calculateRecLength()
+
+    gd = getDifference()
+    gd.getModelTimes()
+    print(gd.audioArray)
+    print(cr.getLengthArray())
+    print(gd.modelArray)
+    # print(len(gd.modelArray))
+    # print(len(gd.audioArray))
+    gd.compareTimes()
+    print(gd.scoreValues)
+    if gd.score != -1:
+        print(1)
+    else:
+        print(gd.score)
+
+if __name__ == "__main__":
+    main()

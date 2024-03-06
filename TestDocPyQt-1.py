@@ -58,7 +58,6 @@ class MenuScreen(QWidget):
     def _callOtherPage(self) -> None:       # Calls the next page of the program
         self.window = step1Window() 
         self.window.show()
-    
 
 def main():     # Function if the file is run by itself
     app = QApplication(sys.argv)
