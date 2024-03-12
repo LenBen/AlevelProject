@@ -12,9 +12,7 @@ from PyQt6.QtGui import(
     QFont,
 )
 
-from comparison import getDifference
-
-gd = getDifference()
+import step3
 
 class Step4Window(QWidget):
     def __init__(self) -> None:
@@ -40,7 +38,7 @@ class Step4Window(QWidget):
         titleLabel.move(self.windowSize//3, 30)
 
         scoreLabel = QLabel(self)
-        scoreLabel.setText(f"Your score is: {gd.score} % !")
+        scoreLabel.setText(f"Your score is: {step3.gd.score} % !")
         scoreLabel.setFont(QFont("Arial", 28))
         scoreLabel.move(self.windowSize//5, 80)
 
@@ -58,21 +56,21 @@ class Step4Window(QWidget):
         self.showGraph = QPushButton("Show Graph Comparing", self)
         self.showGraph.setFixedSize(150,75)
         self.showGraph.move(170, 275)
-        self.showGraph.clicked.connect(gd.plotGraph)
+        self.showGraph.clicked.connect(step3.gd.plotGraph)
     
     def _finishRhythmChecker(self):
         QApplication.closeAllWindows()
    
     def _showFeedback(self):
-        for i in range(len(gd.scoreValues)):
+        for i in range(len(step3.gd.scoreValues)):
             QMessageBox.information(self, f"Beat {i + 1}",
                                     f"""<p>Your score on this beat is:</p>
-                                     <p>{gd.scoreValues[i]}</p>
+                                     <p>{step3.gd.scoreValues[i]}</p>
                                      <p>Where 1 is the best and on time and 4 is the worst and most off rhythm</p> """)
 
     def _runClass(*args):
-        gd.getModelTimes()
-        gd.compareTimes()
+        step3.gd.getModelTimes()
+        step3.gd.compareTimes()
         
 
 def main():     # Function if the file is run by itself
